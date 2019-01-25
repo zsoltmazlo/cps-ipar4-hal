@@ -1,5 +1,5 @@
 from gpiozero import LED
-# from protogen.hal_pb2 import PowerSource
+import protogen.hal_pb2
 
 
 class PowerSourceSelector:
@@ -9,8 +9,7 @@ class PowerSourceSelector:
         self.solar_en = LED(solar_en_pin)
         self.ext_en.off()
         self.solar_en.off()
-        self.source = None
-        # self.source = PowerSource.BATTERY
+        self.source = protogen.hal_pb2.BATTERY
 
     def get_power_source(self):
         return self.source
@@ -18,15 +17,17 @@ class PowerSourceSelector:
     def select_external_source(self):
         self.solar_en.off()
         self.ext_en.on()
-        # self.source = PowerSource.EXTERNAL
+        self.source = protogen.hal_pb2.EXTERNAL
 
     def select_collector_source(self):
         self.ext_en.off()
         self.solar_en.on()
+        self.source = protogen.hal_pb2.COLLECTOR
+
         # self.source = PowerSource.COLLECTOR
 
     def select_battery_source(self):
         self.ext_en.off()
         self.solar_en.off()
-        # self.source = PowerSource.BATTERY
+        self.source = protogen.hal_pb2.BATTERY
 
