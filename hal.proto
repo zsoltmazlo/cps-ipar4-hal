@@ -1,0 +1,198 @@
+syntax = "proto3";
+
+package cps.hal;
+
+// basic metrics for data
+
+message Temperature {
+
+    enum Unit {
+        CELSIUS = 0;
+        FARENHEIT = 1;
+        KELVIN = 2;
+    }
+
+    float value = 1;
+    Unit unit = 2;
+}
+
+message Humidity {
+
+    enum Unit {
+        RELATIVE_HUMIDITY = 0;
+        ABSOLUTE_HUMIDITY = 1;
+        SPECIFIC_HUMIDITY = 2;
+    }
+
+    float value = 1;
+    Unit unit = 2;
+}
+
+message Pressure {
+
+    enum Unit {
+        PASCAL = 0;
+        HECTOPASCAL = 1;
+        KILOPASCAL = 2;
+        ATMOSPHERE = 3;
+        BAR = 4;
+        MILLIBAR = 5;
+    }
+
+    float value = 1;
+    Unit unit = 2;
+}
+
+message Voltage {
+
+    enum Unit {
+        VOLT = 0;
+        MILLIVOLT = 1;
+    }
+
+    float value = 1;
+    Unit unit = 2;
+}
+
+message Current {
+
+    enum Unit {
+        AMPER = 0;
+        MILLIAMPER = 1;
+    }
+
+    float value = 1;
+    Unit unit = 2;
+}
+
+message Illuminance {
+
+    enum Unit {
+        LUX = 0;
+    }
+
+    float value = 1;
+    Unit unit = 2;
+}
+
+message Angle {
+
+    enum Unit {
+        DEGREES = 0;
+        RADIANS = 1;
+        GRADIANS = 2;
+    }
+
+    float value = 1;
+    Unit unit = 2;
+}
+
+enum PowerSource {
+    NO_DATA = 0;
+    BATTERY = 1;
+    EXTERNAL = 2;
+    COLLECTOR = 3;
+}
+
+// request message should contain which data is desired by the caller
+
+message Request {
+
+    enum Data {
+        NO_THANKS = 0;
+
+        // all internal data is received from a sensor placed on the PCB
+        // temperature: data received from BMP280 sensor
+        // humidity: data received from BMP280 sensor
+        // pressure: data received from BMP280 sensor
+        INTERNAL_TEMPERATURE = 1;
+        INTERNAL_HUMIDITY = 2;
+        INTERNAL_PRESSURE = 3;
+
+        // illuminance: data received from BH1750 sensor
+        INTERNAL_ILLUMINANCE = 4;
+
+        // external temperature is received from a DS18B20 sensor
+        EXTERNAL_TEMPERATURE = 5;
+
+        // collector tilt is the currently set angle of the solar panel
+        COLLECTOR_TILT = 6;
+
+        // which power source is in use
+        POWER_SOURCE = 9;
+
+        // pijuice cap provides a battery with 1820mAh capacity to ensure a UPS
+        BATTERY_VOLTAGE = 10;
+        BATTERY_CURRENT = 11;
+        BATTERY_STATE = 12;
+
+        // external power source is a 9V adapter connected to a regular power socket
+        EXTERNAL_PS_VOLTAGE = 15;
+        EXTERNAL_PS_CURRENT = 16;
+        EXTERNAL_PS_STATE = 17;
+
+        // collector power source is a 165x135mm solar energy collector
+        COLLECTOR_PS_VOLTAGE = 20;
+        COLLECTOR_PS_CURRENT = 21;
+        COLLECTOR_PS_STATE = 22;
+
+        ALL = 999;
+    }
+
+    enum Control {
+        NOTHING = 0;
+
+        // choose which available power source should be used to feed the station
+        SET_POWER_SOURCE = 1;
+
+        // set the angle of the collector's tilt
+        SET_COLLECTOR_TILT_ANGLE = 2;
+
+        // show message on display
+        SHOW_MESSAGE = 3;
+    }
+
+    Data data = 1;
+    Control control = 2;
+
+    PowerSource source = 3;
+    Angle angle = 4;
+    string message = 5;
+}
+
+message PowerSourceDetails {
+    Voltage voltage = 1;
+    Current current = 2;
+    string state = 3;
+}
+
+
+message Response {
+
+    enum Status {
+        OK = 0;
+        UNRECOGNISED_REQUEST = 1;
+        INT_TEMPERATURE_ERROR = 2;
+        HUMIDITIY_ERROR = 4;
+        PRESSURE_ERROR = 8;
+        ILLUMINANCE_ERROR = 16;
+        EXT_TEMPERATURE_ERROR = 32;
+        COLLECTOR_TILT_ERROR = 64;
+        BATTERY_ERROR = 128;
+        EXTERNAL_ERROR = 256;
+        COLLECTOR_ERROR = 512;
+    }
+
+    Status status = 1;
+    Temperature temperature = 2;
+    Humidity humidity = 3;
+    Pressure pressure = 4;
+    Illuminance illuminance = 5;
+    Temperature externalTemperature = 6;
+    Angle collectorTilt = 7;
+    PowerSource powerSource = 8;
+
+    PowerSourceDetails batteryDetails = 10;
+    PowerSourceDetails externalPSDetails = 11;
+    PowerSourceDetails collectorPSDetails = 12;
+}
