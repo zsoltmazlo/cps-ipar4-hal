@@ -13,7 +13,7 @@ from actuators.power_source_selector import PowerSourceSelector
 
 # HOST = '127.0.0.1' # only for localhost
 HOST = '0.0.0.0' # on all interface
-PORT = 9004
+PORT = 9005
 
 display = SSD1306()
 env_sensor = BMP280(address=0x76)
@@ -23,6 +23,7 @@ pwr_selector = PowerSourceSelector(ext_en_pin=17, solar_en_pin=27)
 
 battery_source = PiJuice(1, 0x14)
 external_source = INA219(address=0x40)
+collector_source = INA219(address=0x41)
 tilt_actuator = CollectorTilt(board_pin=12, bcm_pin=18)
 
 
@@ -30,13 +31,10 @@ def main():
     display.clear()
     pwr_selector.select_external_source()
 
-    req = hal_pb2.Request()
-    req.data = hal_pb2.Request.INTERNAL_TEMPERATURE
-    print(req.SerializeToString())
-
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sck:
         sck.bind((HOST, PORT))
         display.show_connection_details(PORT)
+        display.show_message_box()
         display.change_connected_status(False)
         print("Port:", PORT)
         print("Waiting for connection...")
@@ -88,28 +86,6 @@ def main():
     display.clear()
     pwr_selector.select_battery_source()
     tilt_actuator.finish()
-    # thread.join()
-    # cap = PiJuice(1, 0x14)
-    # print("IO current:"),
-    # print(cap.status.GetIoCurrent())  # Read PiJuice status.
-    #
-    # print("\nStatus: ")
-    # pprint(cap.status.GetStatus())  # Read PiJuice status.
-    # print("\nCharge level:")
-    # pprint(cap.status.GetChargeLevel())  # Read PiJuice status.
-    # print("\nFault status:")
-    # pprint(cap.status.GetFaultStatus())  # Read PiJuice status.
-    # print("\nBattery temperature:")
-    # pprint(cap.status.GetBatteryTemperature())  # Read PiJuice status.
-    # print("\nBattery voltage:")
-    # pprint(cap.status.GetBatteryVoltage())  # Read PiJuice status.
-    # print("\nBattery current:")
-    # pprint(cap.status.GetBatteryCurrent())  # Read PiJuice status.
-    # print("\nIO voltage:")
-    # pprint(cap.status.GetIoVoltage())  # Read PiJuice status.
-    #
-    # print("\nIO digital input:")
-    # pprint(cap.status.GetIoDigitalInput(1))  # Read PiJuice status.
     pass
 
 
@@ -214,24 +190,85 @@ def process_request(request: hal_pb2.Request):
 
         # read illuminance data from sensor when all data or that specific data requested
         if request.data == hal_pb2.Request.EXTERNAL_PS_VOLTAGE \
-        or request.data == hal_pb2.Request.EXTERNAL_PS_CURRENT \
-        or request.data == hal_pb2.Request.EXTERNAL_PS_STATE \
         or request.data == hal_pb2.Request.ALL:
-            # TODO return with external
-            response.status |= hal_pb2.Response.EXTERNAL_ERROR
+            try:
+                success, voltage = external_source.bus_voltage()
+                if success:
+                    response.externalPSDetails.voltage.value = voltage
+                    response.externalPSDetails.voltage.unit = hal_pb2.Voltage.MILLIVOLT
+                else:
+                    response.status |= hal_pb2.Response.EXTERNAL_ERROR
+            except:
+                response.status |= hal_pb2.Response.EXTERNAL_ERROR
+
+        if request.data == hal_pb2.Request.EXTERNAL_PS_CURRENT \
+        or request.data == hal_pb2.Request.ALL:
+            try:
+                success, current = external_source.current()
+                if success:
+                    response.externalPSDetails.current.value = current
+                    response.externalPSDetails.current.unit = hal_pb2.Voltage.MILLIAMPER
+                else:
+                    response.status |= hal_pb2.Response.EXTERNAL_ERROR
+            except:
+                response.status |= hal_pb2.Response.EXTERNAL_ERROR
+
+        if request.data == hal_pb2.Request.EXTERNAL_PS_STATE \
+        or request.data == hal_pb2.Request.ALL:
+            try:
+                success, voltage = external_source.bus_voltage()
+                if success:
+                    response.externalPSDetails.state = get_power_source_state(voltage)
+                else:
+                    response.status |= hal_pb2.Response.EXTERNAL_ERROR
+            except:
+                response.status |= hal_pb2.Response.EXTERNAL_ERROR
 
         # read illuminance data from sensor when all data or that specific data requested
         if request.data == hal_pb2.Request.COLLECTOR_PS_VOLTAGE \
-        or request.data == hal_pb2.Request.COLLECTOR_PS_CURRENT \
-        or request.data == hal_pb2.Request.COLLECTOR_PS_STATE \
         or request.data == hal_pb2.Request.ALL:
-            # TODO return with collector
-            response.status |= hal_pb2.Response.COLLECTOR_ERROR
+            try:
+                success, voltage = collector_source.bus_voltage()
+                if success:
+                    response.collectorPSDetails.voltage.value = voltage
+                    response.collectorPSDetails.voltage.unit = hal_pb2.Voltage.MILLIVOLT
+                else:
+                    response.status |= hal_pb2.Response.COLLECTOR_ERROR
+            except:
+                response.status |= hal_pb2.Response.COLLECTOR_ERROR
+
+        if request.data == hal_pb2.Request.COLLECTOR_PS_CURRENT \
+        or request.data == hal_pb2.Request.ALL:
+            try:
+                success, current = collector_source.current()
+                if success:
+                    response.collectorPSDetails.current.value = current
+                    response.collectorPSDetails.current.unit = hal_pb2.Voltage.MILLIAMPER
+                else:
+                    response.status |= hal_pb2.Response.COLLECTOR_ERROR
+            except:
+                response.status |= hal_pb2.Response.COLLECTOR_ERROR
+
+        if request.data == hal_pb2.Request.COLLECTOR_PS_STATE  \
+        or request.data == hal_pb2.Request.ALL:
+            try:
+                success, voltage = collector_source.bus_voltage()
+                if success:
+                    response.collectorPSDetails.state = get_power_source_state(voltage)
+                else:
+                    response.status |= hal_pb2.Response.COLLECTOR_ERROR
+            except:
+                response.status |= hal_pb2.Response.COLLECTOR_ERROR
 
     # process control requests
     if request.control != hal_pb2.Request.NOTHING:
         if request.control == hal_pb2.Request.SET_POWER_SOURCE:
-            request.status |= hal_pb2.Response.POWER_SOURCE_ERROR
+            if request.source == hal_pb2.EXTERNAL:
+                pwr_selector.select_external_source()
+            elif request.source == hal_pb2.BATTERY:
+                pwr_selector.select_battery_source()
+            elif request.source == hal_pb2.COLLECTOR:
+                pwr_selector.select_collector_source()
 
         elif request.control == hal_pb2.Request.SET_COLLECTOR_TILT_ANGLE:
             try:
@@ -245,9 +282,23 @@ def process_request(request: hal_pb2.Request):
                 request.status |= hal_pb2.Response.COLLECTOR_TILT_ERROR
 
         elif request.control == hal_pb2.Request.SHOW_MESSAGE:
-            request.status |= hal_pb2.Response.SHOW_MESSAGE_ERROR
+            if request.message is not None and len(request.message) > 0:
+                success = display.show_message(request.message)
+                if not success:
+                    request.status |= hal_pb2.Response.SHOW_MESSAGE_ERROR
+            else:
+                request.status |= hal_pb2.Response.SHOW_MESSAGE_ERROR
 
     return response
+
+
+def get_power_source_state(voltage):
+    states = [[6000, 'excellent'], [5000, 'good'], [4000, 'bad']]
+    for state in states:
+        if voltage > state[0]:
+            return state[1]
+
+    return 'insufficient'
 
 
 if __name__ == '__main__':

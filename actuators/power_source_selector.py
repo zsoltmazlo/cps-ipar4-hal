@@ -24,8 +24,6 @@ class PowerSourceSelector:
         self.solar_en.on()
         self.source = protogen.hal_pb2.COLLECTOR
 
-        # self.source = PowerSource.COLLECTOR
-
     def select_battery_source(self):
         self.ext_en.off()
         self.solar_en.off()

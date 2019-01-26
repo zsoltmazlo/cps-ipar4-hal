@@ -7,9 +7,10 @@ package cps.hal;
 message Temperature {
 
     enum Unit {
-        CELSIUS = 0;
-        FARENHEIT = 1;
-        KELVIN = 2;
+        UNDEFINED = 0;
+        CELSIUS = 1;
+        FARENHEIT = 2;
+        KELVIN = 3;
     }
 
     float value = 1;
@@ -19,9 +20,10 @@ message Temperature {
 message Humidity {
 
     enum Unit {
-        RELATIVE_HUMIDITY = 0;
-        ABSOLUTE_HUMIDITY = 1;
-        SPECIFIC_HUMIDITY = 2;
+        UNDEFINED = 0;
+        RELATIVE_HUMIDITY = 1;
+        ABSOLUTE_HUMIDITY = 2;
+        SPECIFIC_HUMIDITY = 3;
     }
 
     float value = 1;
@@ -31,12 +33,13 @@ message Humidity {
 message Pressure {
 
     enum Unit {
-        PASCAL = 0;
-        HECTOPASCAL = 1;
-        KILOPASCAL = 2;
-        ATMOSPHERE = 3;
-        BAR = 4;
-        MILLIBAR = 5;
+        UNDEFINED = 0;
+        PASCAL = 1;
+        HECTOPASCAL = 2;
+        KILOPASCAL = 3;
+        ATMOSPHERE = 4;
+        BAR = 5;
+        MILLIBAR = 6;
     }
 
     float value = 1;
@@ -46,8 +49,9 @@ message Pressure {
 message Voltage {
 
     enum Unit {
-        VOLT = 0;
+        UNDEFINED = 0;
         MILLIVOLT = 1;
+        VOLT = 2;
     }
 
     float value = 1;
@@ -57,8 +61,9 @@ message Voltage {
 message Current {
 
     enum Unit {
-        AMPER = 0;
+        UNDEFINED = 0;
         MILLIAMPER = 1;
+        AMPER = 2;
     }
 
     float value = 1;
@@ -68,7 +73,8 @@ message Current {
 message Illuminance {
 
     enum Unit {
-        LUX = 0;
+        UNDEFINED = 0;
+        LUX = 1;
     }
 
     float value = 1;
@@ -78,9 +84,10 @@ message Illuminance {
 message Angle {
 
     enum Unit {
-        DEGREES = 0;
-        RADIANS = 1;
-        GRADIANS = 2;
+        UNDEFINED = 0;
+        RADIAN = 1;
+        GRADIAN = 2;
+        DEGREE = 3;
     }
 
     float value = 1;
@@ -88,7 +95,7 @@ message Angle {
 }
 
 enum PowerSource {
-    NO_DATA = 0;
+    UNDEFINED = 0;
     BATTERY = 1;
     EXTERNAL = 2;
     COLLECTOR = 3;
