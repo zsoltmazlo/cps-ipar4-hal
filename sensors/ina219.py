@@ -5,9 +5,9 @@ import adafruit_ina219
 
 class INA219:
 
-    def __init__(self, addr=0x40):
+    def __init__(self, address=0x40):
         i2c = busio.I2C(board.SCL, board.SDA)
-        self.sensor = adafruit_ina219.INA219(i2c, addr)
+        self.sensor = adafruit_ina219.INA219(i2c, address)
 
     def voltage(self):
         try:

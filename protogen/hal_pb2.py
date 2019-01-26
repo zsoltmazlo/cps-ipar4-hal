@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='hal.proto',
   package='cps.hal',
   syntax='proto3',
-  serialized_pb=_b('\n\thal.proto\x12\x07\x63ps.hal\"u\n\x0bTemperature\x12\r\n\x05value\x18\x01 \x01(\x02\x12\'\n\x04unit\x18\x02 \x01(\x0e\x32\x19.cps.hal.Temperature.Unit\".\n\x04Unit\x12\x0b\n\x07\x43\x45LSIUS\x10\x00\x12\r\n\tFARENHEIT\x10\x01\x12\n\n\x06KELVIN\x10\x02\"\x8c\x01\n\x08Humidity\x12\r\n\x05value\x18\x01 \x01(\x02\x12$\n\x04unit\x18\x02 \x01(\x0e\x32\x16.cps.hal.Humidity.Unit\"K\n\x04Unit\x12\x15\n\x11RELATIVE_HUMIDITY\x10\x00\x12\x15\n\x11\x41\x42SOLUTE_HUMIDITY\x10\x01\x12\x15\n\x11SPECIFIC_HUMIDITY\x10\x02\"\x9b\x01\n\x08Pressure\x12\r\n\x05value\x18\x01 \x01(\x02\x12$\n\x04unit\x18\x02 \x01(\x0e\x32\x16.cps.hal.Pressure.Unit\"Z\n\x04Unit\x12\n\n\x06PASCAL\x10\x00\x12\x0f\n\x0bHECTOPASCAL\x10\x01\x12\x0e\n\nKILOPASCAL\x10\x02\x12\x0e\n\nATMOSPHERE\x10\x03\x12\x07\n\x03\x42\x41R\x10\x04\x12\x0c\n\x08MILLIBAR\x10\x05\"^\n\x07Voltage\x12\r\n\x05value\x18\x01 \x01(\x02\x12#\n\x04unit\x18\x02 \x01(\x0e\x32\x15.cps.hal.Voltage.Unit\"\x1f\n\x04Unit\x12\x08\n\x04VOLT\x10\x00\x12\r\n\tMILLIVOLT\x10\x01\"`\n\x07\x43urrent\x12\r\n\x05value\x18\x01 \x01(\x02\x12#\n\x04unit\x18\x02 \x01(\x0e\x32\x15.cps.hal.Current.Unit\"!\n\x04Unit\x12\t\n\x05\x41MPER\x10\x00\x12\x0e\n\nMILLIAMPER\x10\x01\"V\n\x0bIlluminance\x12\r\n\x05value\x18\x01 \x01(\x02\x12\'\n\x04unit\x18\x02 \x01(\x0e\x32\x19.cps.hal.Illuminance.Unit\"\x0f\n\x04Unit\x12\x07\n\x03LUX\x10\x00\"i\n\x05\x41ngle\x12\r\n\x05value\x18\x01 \x01(\x02\x12!\n\x04unit\x18\x02 \x01(\x0e\x32\x13.cps.hal.Angle.Unit\".\n\x04Unit\x12\x0b\n\x07\x44\x45GREES\x10\x00\x12\x0b\n\x07RADIANS\x10\x01\x12\x0c\n\x08GRADIANS\x10\x02\"\xa3\x05\n\x07Request\x12#\n\x04\x64\x61ta\x18\x01 \x01(\x0e\x32\x15.cps.hal.Request.Data\x12)\n\x07\x63ontrol\x18\x02 \x01(\x0e\x32\x18.cps.hal.Request.Control\x12$\n\x06source\x18\x03 \x01(\x0e\x32\x14.cps.hal.PowerSource\x12\x1d\n\x05\x61ngle\x18\x04 \x01(\x0b\x32\x0e.cps.hal.Angle\x12\x0f\n\x07message\x18\x05 \x01(\t\"\x93\x03\n\x04\x44\x61ta\x12\r\n\tNO_THANKS\x10\x00\x12\x18\n\x14INTERNAL_TEMPERATURE\x10\x01\x12\x15\n\x11INTERNAL_HUMIDITY\x10\x02\x12\x15\n\x11INTERNAL_PRESSURE\x10\x03\x12\x18\n\x14INTERNAL_ILLUMINANCE\x10\x04\x12\x18\n\x14\x45XTERNAL_TEMPERATURE\x10\x05\x12\x12\n\x0e\x43OLLECTOR_TILT\x10\x06\x12\x10\n\x0cPOWER_SOURCE\x10\t\x12\x13\n\x0f\x42\x41TTERY_VOLTAGE\x10\n\x12\x13\n\x0f\x42\x41TTERY_CURRENT\x10\x0b\x12\x11\n\rBATTERY_STATE\x10\x0c\x12\x17\n\x13\x45XTERNAL_PS_VOLTAGE\x10\x0f\x12\x17\n\x13\x45XTERNAL_PS_CURRENT\x10\x10\x12\x15\n\x11\x45XTERNAL_PS_STATE\x10\x11\x12\x18\n\x14\x43OLLECTOR_PS_VOLTAGE\x10\x14\x12\x18\n\x14\x43OLLECTOR_PS_CURRENT\x10\x15\x12\x16\n\x12\x43OLLECTOR_PS_STATE\x10\x16\x12\x08\n\x03\x41LL\x10\xe7\x07\"\\\n\x07\x43ontrol\x12\x0b\n\x07NOTHING\x10\x00\x12\x14\n\x10SET_POWER_SOURCE\x10\x01\x12\x1c\n\x18SET_COLLECTOR_TILT_ANGLE\x10\x02\x12\x10\n\x0cSHOW_MESSAGE\x10\x03\"i\n\x12PowerSourceDetails\x12!\n\x07voltage\x18\x01 \x01(\x0b\x32\x10.cps.hal.Voltage\x12!\n\x07\x63urrent\x18\x02 \x01(\x0b\x32\x10.cps.hal.Current\x12\r\n\x05state\x18\x03 \x01(\t\"\x9c\x04\n\x08Response\x12(\n\x06status\x18\x01 \x01(\x0e\x32\x18.cps.hal.Response.Status\x12)\n\x0btemperature\x18\x02 \x01(\x0b\x32\x14.cps.hal.Temperature\x12#\n\x08humidity\x18\x03 \x01(\x0b\x32\x11.cps.hal.Humidity\x12#\n\x08pressure\x18\x04 \x01(\x0b\x32\x11.cps.hal.Pressure\x12)\n\x0billuminance\x18\x05 \x01(\x0b\x32\x14.cps.hal.Illuminance\x12\x31\n\x13\x65xternalTemperature\x18\x06 \x01(\x0b\x32\x14.cps.hal.Temperature\x12%\n\rcollectorTilt\x18\x07 \x01(\x0b\x32\x0e.cps.hal.Angle\x12)\n\x0bpowerSource\x18\x08 \x01(\x0e\x32\x14.cps.hal.PowerSource\x12\x33\n\x0e\x62\x61tteryDetails\x18\n \x01(\x0b\x32\x1b.cps.hal.PowerSourceDetails\x12\x36\n\x11\x65xternalPSDetails\x18\x0b \x01(\x0b\x32\x1b.cps.hal.PowerSourceDetails\x12\x37\n\x12\x63ollectorPSDetails\x18\x0c \x01(\x0b\x32\x1b.cps.hal.PowerSourceDetails\"\x1b\n\x06Status\x12\x06\n\x02OK\x10\x00\x12\t\n\x05\x45RROR\x10\x01*7\n\x0bPowerSource\x12\x0b\n\x07\x42\x41TTERY\x10\x00\x12\x0c\n\x08\x45XTERNAL\x10\x01\x12\r\n\tCOLLECTOR\x10\x02\x62\x06proto3')
+  serialized_pb=_b('\n\thal.proto\x12\x07\x63ps.hal\"u\n\x0bTemperature\x12\r\n\x05value\x18\x01 \x01(\x02\x12\'\n\x04unit\x18\x02 \x01(\x0e\x32\x19.cps.hal.Temperature.Unit\".\n\x04Unit\x12\x0b\n\x07\x43\x45LSIUS\x10\x00\x12\r\n\tFARENHEIT\x10\x01\x12\n\n\x06KELVIN\x10\x02\"\x8c\x01\n\x08Humidity\x12\r\n\x05value\x18\x01 \x01(\x02\x12$\n\x04unit\x18\x02 \x01(\x0e\x32\x16.cps.hal.Humidity.Unit\"K\n\x04Unit\x12\x15\n\x11RELATIVE_HUMIDITY\x10\x00\x12\x15\n\x11\x41\x42SOLUTE_HUMIDITY\x10\x01\x12\x15\n\x11SPECIFIC_HUMIDITY\x10\x02\"\x9b\x01\n\x08Pressure\x12\r\n\x05value\x18\x01 \x01(\x02\x12$\n\x04unit\x18\x02 \x01(\x0e\x32\x16.cps.hal.Pressure.Unit\"Z\n\x04Unit\x12\n\n\x06PASCAL\x10\x00\x12\x0f\n\x0bHECTOPASCAL\x10\x01\x12\x0e\n\nKILOPASCAL\x10\x02\x12\x0e\n\nATMOSPHERE\x10\x03\x12\x07\n\x03\x42\x41R\x10\x04\x12\x0c\n\x08MILLIBAR\x10\x05\"^\n\x07Voltage\x12\r\n\x05value\x18\x01 \x01(\x02\x12#\n\x04unit\x18\x02 \x01(\x0e\x32\x15.cps.hal.Voltage.Unit\"\x1f\n\x04Unit\x12\x08\n\x04VOLT\x10\x00\x12\r\n\tMILLIVOLT\x10\x01\"`\n\x07\x43urrent\x12\r\n\x05value\x18\x01 \x01(\x02\x12#\n\x04unit\x18\x02 \x01(\x0e\x32\x15.cps.hal.Current.Unit\"!\n\x04Unit\x12\t\n\x05\x41MPER\x10\x00\x12\x0e\n\nMILLIAMPER\x10\x01\"V\n\x0bIlluminance\x12\r\n\x05value\x18\x01 \x01(\x02\x12\'\n\x04unit\x18\x02 \x01(\x0e\x32\x19.cps.hal.Illuminance.Unit\"\x0f\n\x04Unit\x12\x07\n\x03LUX\x10\x00\"i\n\x05\x41ngle\x12\r\n\x05value\x18\x01 \x01(\x02\x12!\n\x04unit\x18\x02 \x01(\x0e\x32\x13.cps.hal.Angle.Unit\".\n\x04Unit\x12\x0b\n\x07\x44\x45GREES\x10\x00\x12\x0b\n\x07RADIANS\x10\x01\x12\x0c\n\x08GRADIANS\x10\x02\"\xa3\x05\n\x07Request\x12#\n\x04\x64\x61ta\x18\x01 \x01(\x0e\x32\x15.cps.hal.Request.Data\x12)\n\x07\x63ontrol\x18\x02 \x01(\x0e\x32\x18.cps.hal.Request.Control\x12$\n\x06source\x18\x03 \x01(\x0e\x32\x14.cps.hal.PowerSource\x12\x1d\n\x05\x61ngle\x18\x04 \x01(\x0b\x32\x0e.cps.hal.Angle\x12\x0f\n\x07message\x18\x05 \x01(\t\"\x93\x03\n\x04\x44\x61ta\x12\r\n\tNO_THANKS\x10\x00\x12\x18\n\x14INTERNAL_TEMPERATURE\x10\x01\x12\x15\n\x11INTERNAL_HUMIDITY\x10\x02\x12\x15\n\x11INTERNAL_PRESSURE\x10\x03\x12\x18\n\x14INTERNAL_ILLUMINANCE\x10\x04\x12\x18\n\x14\x45XTERNAL_TEMPERATURE\x10\x05\x12\x12\n\x0e\x43OLLECTOR_TILT\x10\x06\x12\x10\n\x0cPOWER_SOURCE\x10\t\x12\x13\n\x0f\x42\x41TTERY_VOLTAGE\x10\n\x12\x13\n\x0f\x42\x41TTERY_CURRENT\x10\x0b\x12\x11\n\rBATTERY_STATE\x10\x0c\x12\x17\n\x13\x45XTERNAL_PS_VOLTAGE\x10\x0f\x12\x17\n\x13\x45XTERNAL_PS_CURRENT\x10\x10\x12\x15\n\x11\x45XTERNAL_PS_STATE\x10\x11\x12\x18\n\x14\x43OLLECTOR_PS_VOLTAGE\x10\x14\x12\x18\n\x14\x43OLLECTOR_PS_CURRENT\x10\x15\x12\x16\n\x12\x43OLLECTOR_PS_STATE\x10\x16\x12\x08\n\x03\x41LL\x10\xe7\x07\"\\\n\x07\x43ontrol\x12\x0b\n\x07NOTHING\x10\x00\x12\x14\n\x10SET_POWER_SOURCE\x10\x01\x12\x1c\n\x18SET_COLLECTOR_TILT_ANGLE\x10\x02\x12\x10\n\x0cSHOW_MESSAGE\x10\x03\"i\n\x12PowerSourceDetails\x12!\n\x07voltage\x18\x01 \x01(\x0b\x32\x10.cps.hal.Voltage\x12!\n\x07\x63urrent\x18\x02 \x01(\x0b\x32\x10.cps.hal.Current\x12\r\n\x05state\x18\x03 \x01(\t\"\xad\x06\n\x08Response\x12(\n\x06status\x18\x01 \x01(\x0e\x32\x18.cps.hal.Response.Status\x12)\n\x0btemperature\x18\x02 \x01(\x0b\x32\x14.cps.hal.Temperature\x12#\n\x08humidity\x18\x03 \x01(\x0b\x32\x11.cps.hal.Humidity\x12#\n\x08pressure\x18\x04 \x01(\x0b\x32\x11.cps.hal.Pressure\x12)\n\x0billuminance\x18\x05 \x01(\x0b\x32\x14.cps.hal.Illuminance\x12\x31\n\x13\x65xternalTemperature\x18\x06 \x01(\x0b\x32\x14.cps.hal.Temperature\x12%\n\rcollectorTilt\x18\x07 \x01(\x0b\x32\x0e.cps.hal.Angle\x12)\n\x0bpowerSource\x18\x08 \x01(\x0e\x32\x14.cps.hal.PowerSource\x12\x33\n\x0e\x62\x61tteryDetails\x18\n \x01(\x0b\x32\x1b.cps.hal.PowerSourceDetails\x12\x36\n\x11\x65xternalPSDetails\x18\x0b \x01(\x0b\x32\x1b.cps.hal.PowerSourceDetails\x12\x37\n\x12\x63ollectorPSDetails\x18\x0c \x01(\x0b\x32\x1b.cps.hal.PowerSourceDetails\"\xab\x02\n\x06Status\x12\x06\n\x02OK\x10\x00\x12\x18\n\x14UNRECOGNISED_REQUEST\x10\x01\x12\x19\n\x15INT_TEMPERATURE_ERROR\x10\x02\x12\x13\n\x0fHUMIDITIY_ERROR\x10\x04\x12\x12\n\x0ePRESSURE_ERROR\x10\x08\x12\x15\n\x11ILLUMINANCE_ERROR\x10\x10\x12\x19\n\x15\x45XT_TEMPERATURE_ERROR\x10 \x12\x18\n\x14\x43OLLECTOR_TILT_ERROR\x10@\x12\x12\n\rBATTERY_ERROR\x10\x80\x01\x12\x13\n\x0e\x45XTERNAL_ERROR\x10\x80\x02\x12\x14\n\x0f\x43OLLECTOR_ERROR\x10\x80\x04\x12\x17\n\x12POWER_SOURCE_ERROR\x10\x80\x08\x12\x17\n\x12SHOW_MESSAGE_ERROR\x10\x80\x10*D\n\x0bPowerSource\x12\x0b\n\x07NO_DATA\x10\x00\x12\x0b\n\x07\x42\x41TTERY\x10\x01\x12\x0c\n\x08\x45XTERNAL\x10\x02\x12\r\n\tCOLLECTOR\x10\x03\x62\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -31,29 +31,34 @@ _POWERSOURCE = _descriptor.EnumDescriptor(
   file=DESCRIPTOR,
   values=[
     _descriptor.EnumValueDescriptor(
-      name='BATTERY', index=0, number=0,
+      name='NO_DATA', index=0, number=0,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='EXTERNAL', index=1, number=1,
+      name='BATTERY', index=1, number=1,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='COLLECTOR', index=2, number=2,
+      name='EXTERNAL', index=2, number=2,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='COLLECTOR', index=3, number=3,
       options=None,
       type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=2159,
-  serialized_end=2214,
+  serialized_start=2432,
+  serialized_end=2500,
 )
 _sym_db.RegisterEnumDescriptor(_POWERSOURCE)
 
 PowerSource = enum_type_wrapper.EnumTypeWrapper(_POWERSOURCE)
-BATTERY = 0
-EXTERNAL = 1
-COLLECTOR = 2
+NO_DATA = 0
+BATTERY = 1
+EXTERNAL = 2
+COLLECTOR = 3
 
 
 _TEMPERATURE_UNIT = _descriptor.EnumDescriptor(
@@ -361,14 +366,58 @@ _RESPONSE_STATUS = _descriptor.EnumDescriptor(
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='ERROR', index=1, number=1,
+      name='UNRECOGNISED_REQUEST', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='INT_TEMPERATURE_ERROR', index=2, number=2,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='HUMIDITIY_ERROR', index=3, number=4,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='PRESSURE_ERROR', index=4, number=8,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='ILLUMINANCE_ERROR', index=5, number=16,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='EXT_TEMPERATURE_ERROR', index=6, number=32,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='COLLECTOR_TILT_ERROR', index=7, number=64,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='BATTERY_ERROR', index=8, number=128,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='EXTERNAL_ERROR', index=9, number=256,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='COLLECTOR_ERROR', index=10, number=512,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='POWER_SOURCE_ERROR', index=11, number=1024,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='SHOW_MESSAGE_ERROR', index=12, number=2048,
       options=None,
       type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=2130,
-  serialized_end=2157,
+  serialized_start=2131,
+  serialized_end=2430,
 )
 _sym_db.RegisterEnumDescriptor(_RESPONSE_STATUS)
 
@@ -850,7 +899,7 @@ _RESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=1617,
-  serialized_end=2157,
+  serialized_end=2430,
 )
 
 _TEMPERATURE.fields_by_name['unit'].enum_type = _TEMPERATURE_UNIT

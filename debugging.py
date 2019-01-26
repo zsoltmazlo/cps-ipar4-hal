@@ -5,13 +5,16 @@ from pprint import pprint
 from protogen import hal_pb2
 
 
-def socket_test(host, port):
+def socket_test(host, port, angle):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sck:
         sck.connect((host, port))
         print("Connected to socket, sending test data")
 
         tmp = hal_pb2.Request()
         tmp.data = hal_pb2.Request.ALL
+        tmp.control = hal_pb2.Request.SET_COLLECTOR_TILT_ANGLE
+        tmp.angle.value = angle
+        tmp.angle.unit = hal_pb2.Angle.DEGREES
         sck.sendall(tmp.SerializeToString())
         data = sck.recv(200)
         resp = hal_pb2.Response()

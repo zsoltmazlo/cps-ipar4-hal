@@ -45,8 +45,8 @@ class BH1750:
     ONE_TIME_LOW_RES_MODE = 0x23
 
 
-    def __init__(self, addr=ADDRESS):
-        self.address = addr
+    def __init__(self, address=ADDRESS):
+        self.address = address
         self.bus = smbus.SMBus(1)  # Rev 2 Pi uses 1
 
 

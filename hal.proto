@@ -181,6 +181,8 @@ message Response {
         BATTERY_ERROR = 128;
         EXTERNAL_ERROR = 256;
         COLLECTOR_ERROR = 512;
+        POWER_SOURCE_ERROR = 1024;
+        SHOW_MESSAGE_ERROR = 2048;
     }
 
     Status status = 1;
