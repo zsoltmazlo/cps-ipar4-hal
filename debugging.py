@@ -16,7 +16,7 @@ def socket_test(host, port, angle=None, message=None):
         if angle is not None:
             tmp.control = hal_pb2.Request.SET_COLLECTOR_TILT_ANGLE
             tmp.angle.value = angle
-            tmp.angle.unit = hal_pb2.Angle.DEGREES
+            tmp.angle.unit = hal_pb2.Angle.DEGREE
 
         if message is not None:
             tmp.control = hal_pb2.Request.SHOW_MESSAGE

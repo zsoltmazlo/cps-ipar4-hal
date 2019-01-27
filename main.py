@@ -13,7 +13,7 @@ from actuators.power_source_selector import PowerSourceSelector
 
 # HOST = '127.0.0.1' # only for localhost
 HOST = '0.0.0.0' # on all interface
-PORT = 9005
+PORT = 9003
 
 display = SSD1306()
 env_sensor = BMP280(address=0x76)
@@ -21,15 +21,16 @@ temp_sensor = DS18B20()
 light_sensor = BH1750(address=0x23)
 pwr_selector = PowerSourceSelector(ext_en_pin=17, solar_en_pin=27)
 
-battery_source = PiJuice(1, 0x14)
+battery_source = PiJuice(bus=1, address=0x14)
 external_source = INA219(address=0x40)
 collector_source = INA219(address=0x41)
-tilt_actuator = CollectorTilt(board_pin=12, bcm_pin=18)
+tilt_actuator = CollectorTilt(pca9865_address=0x60)
 
 
 def main():
     display.clear()
     pwr_selector.select_external_source()
+    tilt_actuator.set_angle(0)
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sck:
         sck.bind((HOST, PORT))
@@ -136,11 +137,14 @@ def process_request(request: hal_pb2.Request):
         # read ext. temperature data from sensor when all data or that specific data requested
         if request.data == hal_pb2.Request.EXTERNAL_TEMPERATURE \
         or request.data == hal_pb2.Request.ALL:
-            success, temp = temp_sensor.temperature()
-            if success:
-                response.externalTemperature.value = temp
-                response.externalTemperature.unit  = hal_pb2.Temperature.CELSIUS
-            else:
+            try:
+                success, temp = temp_sensor.temperature()
+                if success:
+                    response.externalTemperature.value = temp
+                    response.externalTemperature.unit  = hal_pb2.Temperature.CELSIUS
+                else:
+                    response.status |= hal_pb2.Response.EXT_TEMPERATURE_ERROR
+            except:
                 response.status |= hal_pb2.Response.EXT_TEMPERATURE_ERROR
 
         # read illuminance data from sensor when all data or that specific data requested
@@ -150,7 +154,7 @@ def process_request(request: hal_pb2.Request):
                 success, angle = tilt_actuator.get_angle()
                 if success:
                     response.collectorTilt.value = angle
-                    response.collectorTilt.unit = hal_pb2.Angle.DEGREES
+                    response.collectorTilt.unit = hal_pb2.Angle.DEGREE
                 else:
                     request.status |= hal_pb2.Response.COLLECTOR_TILT_ERROR
             except:
