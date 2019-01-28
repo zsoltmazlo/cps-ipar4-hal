@@ -114,36 +114,35 @@ message Request {
         // pressure: data received from BMP280 sensor
         INTERNAL_TEMPERATURE = 1;
         INTERNAL_HUMIDITY = 2;
-        INTERNAL_PRESSURE = 3;
+        INTERNAL_PRESSURE = 4;
 
         // illuminance: data received from BH1750 sensor
-        INTERNAL_ILLUMINANCE = 4;
+        INTERNAL_ILLUMINANCE = 8;
 
         // external temperature is received from a DS18B20 sensor
-        EXTERNAL_TEMPERATURE = 5;
+        EXTERNAL_TEMPERATURE = 16;
 
         // collector tilt is the currently set angle of the solar panel
-        COLLECTOR_TILT = 6;
+        COLLECTOR_TILT = 32;
+        COLLECTOR_ROTATION = 64;
 
         // which power source is in use
-        POWER_SOURCE = 9;
+        POWER_SOURCE = 128;
 
         // pijuice cap provides a battery with 1820mAh capacity to ensure a UPS
-        BATTERY_VOLTAGE = 10;
-        BATTERY_CURRENT = 11;
-        BATTERY_STATE = 12;
+        BATTERY_VOLTAGE = 256;
+        BATTERY_CURRENT = 512;
+        BATTERY_STATE = 1024;
 
         // external power source is a 9V adapter connected to a regular power socket
-        EXTERNAL_PS_VOLTAGE = 15;
-        EXTERNAL_PS_CURRENT = 16;
-        EXTERNAL_PS_STATE = 17;
+        EXTERNAL_PS_VOLTAGE = 2048;
+        EXTERNAL_PS_CURRENT = 4096;
+        EXTERNAL_PS_STATE = 8192;
 
         // collector power source is a 165x135mm solar energy collector
-        COLLECTOR_PS_VOLTAGE = 20;
-        COLLECTOR_PS_CURRENT = 21;
-        COLLECTOR_PS_STATE = 22;
-
-        ALL = 999;
+        COLLECTOR_PS_VOLTAGE = 16384;
+        COLLECTOR_PS_CURRENT = 32768;
+        COLLECTOR_PS_STATE = 65536;
     }
 
     enum Control {
@@ -155,16 +154,20 @@ message Request {
         // set the angle of the collector's tilt
         SET_COLLECTOR_TILT_ANGLE = 2;
 
+        // set the angle of the collector's rotation
+        SET_COLLECTOR_ROTATION_ANGLE = 4;
+
         // show message on display
-        SHOW_MESSAGE = 3;
+        SHOW_MESSAGE = 8;
     }
 
     Data data = 1;
     Control control = 2;
 
     PowerSource source = 3;
-    Angle angle = 4;
-    string message = 5;
+    Angle tilt_angle = 4;
+    Angle rotation_angle = 5;
+    string message = 6;
 }
 
 message PowerSourceDetails {
@@ -185,11 +188,12 @@ message Response {
         ILLUMINANCE_ERROR = 16;
         EXT_TEMPERATURE_ERROR = 32;
         COLLECTOR_TILT_ERROR = 64;
-        BATTERY_ERROR = 128;
-        EXTERNAL_ERROR = 256;
-        COLLECTOR_ERROR = 512;
-        POWER_SOURCE_ERROR = 1024;
-        SHOW_MESSAGE_ERROR = 2048;
+        COLLECTOR_ROTATION_ERROR = 128;
+        BATTERY_ERROR = 256;
+        EXTERNAL_ERROR = 512;
+        COLLECTOR_ERROR = 1024;
+        POWER_SOURCE_ERROR = 2048;
+        SHOW_MESSAGE_ERROR = 4096;
     }
 
     Status status = 1;

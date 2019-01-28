@@ -5,7 +5,7 @@ from pprint import pprint
 from protogen import hal_pb2
 
 
-def socket_test(host, port, angle=None, message=None):
+def socket_test(host, port, angle=None, message=None, source=None):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sck:
         sck.connect((host, port))
         print("Connected to socket, sending test data")
@@ -21,6 +21,10 @@ def socket_test(host, port, angle=None, message=None):
         if message is not None:
             tmp.control = hal_pb2.Request.SHOW_MESSAGE
             tmp.message = message
+
+        if source is not None:
+            tmp.control = hal_pb2.Request.SET_POWER_SOURCE
+            tmp.source = source
 
         sck.sendall(tmp.SerializeToString())
         data = sck.recv(200)

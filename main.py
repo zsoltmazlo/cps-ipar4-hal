@@ -1,5 +1,5 @@
 from pijuice import PiJuice
-from actuators.collectortilt import CollectorTilt
+from actuators.collectorpositioner import CollectorPositioner
 from protogen import hal_pb2
 import socket
 from sensors.bh1750 import BH1750
@@ -13,7 +13,7 @@ from actuators.power_source_selector import PowerSourceSelector
 
 # HOST = '127.0.0.1' # only for localhost
 HOST = '0.0.0.0' # on all interface
-PORT = 9003
+PORT = 9002
 
 display = SSD1306()
 env_sensor = BMP280(address=0x76)
@@ -24,7 +24,7 @@ pwr_selector = PowerSourceSelector(ext_en_pin=17, solar_en_pin=27)
 battery_source = PiJuice(bus=1, address=0x14)
 external_source = INA219(address=0x40)
 collector_source = INA219(address=0x41)
-tilt_actuator = CollectorTilt(pca9865_address=0x60)
+tilt_actuator = CollectorPositioner(pca9865_address=0x60)
 
 
 def main():
@@ -100,8 +100,7 @@ def process_request(request: hal_pb2.Request):
     if request.data != hal_pb2.Request.NO_THANKS:
 
         # read temperature data from sensor when all data or that specific data requested
-        if request.data == hal_pb2.Request.INTERNAL_TEMPERATURE \
-        or request.data == hal_pb2.Request.ALL:
+        if (request.data & hal_pb2.Request.INTERNAL_TEMPERATURE) > 0:
             success, temp = env_sensor.get_temperature()
             if success:
                 response.temperature.value = temp
@@ -110,13 +109,11 @@ def process_request(request: hal_pb2.Request):
                 response.status |= hal_pb2.Response.INT_TEMPERATURE_ERROR
 
         # read humidity data from sensor when all data or that specific data requested
-        if request.data == hal_pb2.Request.INTERNAL_HUMIDITY \
-        or request.data == hal_pb2.Request.ALL:
+        if (request.data & hal_pb2.Request.INTERNAL_HUMIDITY) > 0:
             response.status |= hal_pb2.Response.HUMIDITIY_ERROR
 
         # read pressure data from sensor when all data or that specific data requested
-        if request.data == hal_pb2.Request.INTERNAL_PRESSURE \
-        or request.data == hal_pb2.Request.ALL:
+        if (request.data & hal_pb2.Request.INTERNAL_PRESSURE) > 0:
             success, pressure = env_sensor.get_pressure()
             if success:
                 response.pressure.value = pressure
@@ -125,8 +122,7 @@ def process_request(request: hal_pb2.Request):
                 response.status |= hal_pb2.Response.PRESSURE_ERROR
 
         # read illuminance data from sensor when all data or that specific data requested
-        if request.data == hal_pb2.Request.INTERNAL_ILLUMINANCE \
-        or request.data == hal_pb2.Request.ALL:
+        if (request.data & hal_pb2.Request.INTERNAL_ILLUMINANCE) > 0:
             success, lux = light_sensor.read_intensity()
             if success:
                 response.illuminance.value = lux
@@ -135,8 +131,7 @@ def process_request(request: hal_pb2.Request):
                 response.status |= hal_pb2.Response.ILLUMINANCE_ERROR
 
         # read ext. temperature data from sensor when all data or that specific data requested
-        if request.data == hal_pb2.Request.EXTERNAL_TEMPERATURE \
-        or request.data == hal_pb2.Request.ALL:
+        if (request.data & hal_pb2.Request.EXTERNAL_TEMPERATURE) > 0:
             try:
                 success, temp = temp_sensor.temperature()
                 if success:
@@ -147,11 +142,10 @@ def process_request(request: hal_pb2.Request):
             except:
                 response.status |= hal_pb2.Response.EXT_TEMPERATURE_ERROR
 
-        # read illuminance data from sensor when all data or that specific data requested
-        if request.data == hal_pb2.Request.COLLECTOR_TILT \
-        or request.data == hal_pb2.Request.ALL:
+        # read collector tilt data from sensor when all data or that specific data requested
+        if (request.data & hal_pb2.Request.COLLECTOR_TILT) > 0:
             try:
-                success, angle = tilt_actuator.get_angle()
+                success, angle = tilt_actuator.get_tilt_angle()
                 if success:
                     response.collectorTilt.value = angle
                     response.collectorTilt.unit = hal_pb2.Angle.DEGREE
@@ -160,14 +154,16 @@ def process_request(request: hal_pb2.Request):
             except:
                 request.status |= hal_pb2.Response.COLLECTOR_TILT_ERROR
 
+        # read collector rotation data from sensor when all data or that specific data requested
+        if (request.data & hal_pb2.Request.COLLECTOR_ROTATION) > 0:
+                request.status |= hal_pb2.Response.COLLECTOR_ROTATION_ERROR
+
         # read power source state from selector when all data or that specific data requested
-        if request.data == hal_pb2.Request.POWER_SOURCE \
-        or request.data == hal_pb2.Request.ALL:
+        if (request.data & hal_pb2.Request.POWER_SOURCE) > 0:
             response.powerSource = pwr_selector.get_power_source()
 
         # read battery voltage data from sensor when all data or that specific data requested
-        if request.data == hal_pb2.Request.BATTERY_VOLTAGE \
-        or request.data == hal_pb2.Request.ALL:
+        if (request.data & hal_pb2.Request.BATTERY_VOLTAGE) > 0:
             state = battery_source.status.GetBatteryVoltage()
             if state['error'] == 'NO_ERROR':
                 response.batteryDetails.voltage.value = state['data']
@@ -175,8 +171,7 @@ def process_request(request: hal_pb2.Request):
             else:
                 response.status |= hal_pb2.Response.BATTERY_ERROR
 
-        if request.data == hal_pb2.Request.BATTERY_CURRENT \
-        or request.data == hal_pb2.Request.ALL:
+        if (request.data & hal_pb2.Request.BATTERY_CURRENT) > 0:
             state = battery_source.status.GetBatteryCurrent()
             if state['error'] == 'NO_ERROR':
                 response.batteryDetails.current.value = state['data']
@@ -184,17 +179,15 @@ def process_request(request: hal_pb2.Request):
             else:
                 response.status |= hal_pb2.Response.BATTERY_ERROR
 
-        if request.data == hal_pb2.Request.BATTERY_STATE \
-        or request.data == hal_pb2.Request.ALL:
+        if (request.data & hal_pb2.Request.BATTERY_STATE) > 0:
             state = battery_source.status.GetChargeLevel()
             if state['error'] == 'NO_ERROR':
                 response.batteryDetails.state = str(state['data'])
             else:
                 response.status |= hal_pb2.Response.BATTERY_ERROR
 
-        # read illuminance data from sensor when all data or that specific data requested
-        if request.data == hal_pb2.Request.EXTERNAL_PS_VOLTAGE \
-        or request.data == hal_pb2.Request.ALL:
+        # read external power source data from sensor when all data or that specific data requested
+        if (request.data & hal_pb2.Request.EXTERNAL_PS_VOLTAGE) > 0:
             try:
                 success, voltage = external_source.bus_voltage()
                 if success:
@@ -205,8 +198,7 @@ def process_request(request: hal_pb2.Request):
             except:
                 response.status |= hal_pb2.Response.EXTERNAL_ERROR
 
-        if request.data == hal_pb2.Request.EXTERNAL_PS_CURRENT \
-        or request.data == hal_pb2.Request.ALL:
+        if (request.data & hal_pb2.Request.EXTERNAL_PS_CURRENT) > 0:
             try:
                 success, current = external_source.current()
                 if success:
@@ -217,8 +209,7 @@ def process_request(request: hal_pb2.Request):
             except:
                 response.status |= hal_pb2.Response.EXTERNAL_ERROR
 
-        if request.data == hal_pb2.Request.EXTERNAL_PS_STATE \
-        or request.data == hal_pb2.Request.ALL:
+        if (request.data & hal_pb2.Request.EXTERNAL_PS_STATE) > 0:
             try:
                 success, voltage = external_source.bus_voltage()
                 if success:
@@ -228,9 +219,8 @@ def process_request(request: hal_pb2.Request):
             except:
                 response.status |= hal_pb2.Response.EXTERNAL_ERROR
 
-        # read illuminance data from sensor when all data or that specific data requested
-        if request.data == hal_pb2.Request.COLLECTOR_PS_VOLTAGE \
-        or request.data == hal_pb2.Request.ALL:
+        # read collector power source data from sensor when all data or that specific data requested
+        if (request.data & hal_pb2.Request.COLLECTOR_PS_VOLTAGE) > 0:
             try:
                 success, voltage = collector_source.bus_voltage()
                 if success:
@@ -241,8 +231,7 @@ def process_request(request: hal_pb2.Request):
             except:
                 response.status |= hal_pb2.Response.COLLECTOR_ERROR
 
-        if request.data == hal_pb2.Request.COLLECTOR_PS_CURRENT \
-        or request.data == hal_pb2.Request.ALL:
+        if (request.data & hal_pb2.Request.COLLECTOR_PS_CURRENT) > 0:
             try:
                 success, current = collector_source.current()
                 if success:
@@ -253,8 +242,7 @@ def process_request(request: hal_pb2.Request):
             except:
                 response.status |= hal_pb2.Response.COLLECTOR_ERROR
 
-        if request.data == hal_pb2.Request.COLLECTOR_PS_STATE  \
-        or request.data == hal_pb2.Request.ALL:
+        if (request.data & hal_pb2.Request.COLLECTOR_PS_STATE) > 0:
             try:
                 success, voltage = collector_source.bus_voltage()
                 if success:
@@ -266,7 +254,7 @@ def process_request(request: hal_pb2.Request):
 
     # process control requests
     if request.control != hal_pb2.Request.NOTHING:
-        if request.control == hal_pb2.Request.SET_POWER_SOURCE:
+        if (request.control & hal_pb2.Request.SET_POWER_SOURCE) > 0:
             if request.source == hal_pb2.EXTERNAL:
                 pwr_selector.select_external_source()
             elif request.source == hal_pb2.BATTERY:
@@ -274,18 +262,21 @@ def process_request(request: hal_pb2.Request):
             elif request.source == hal_pb2.COLLECTOR:
                 pwr_selector.select_collector_source()
 
-        elif request.control == hal_pb2.Request.SET_COLLECTOR_TILT_ANGLE:
+        if (request.control & hal_pb2.Request.SET_COLLECTOR_TILT_ANGLE) > 0:
             try:
-                success, angle = tilt_actuator.set_angle(request.angle.value)
+                success, angle = tilt_actuator.set_tilt_angle(request.angle.value)
                 if success:
                     response.collectorTilt.value = angle
-                    response.collectorTilt.unit = hal_pb2.Angle.DEGREES
+                    response.collectorTilt.unit = hal_pb2.Angle.DEGREE
                 else:
                     request.status |= hal_pb2.Response.COLLECTOR_TILT_ERROR
             except:
                 request.status |= hal_pb2.Response.COLLECTOR_TILT_ERROR
 
-        elif request.control == hal_pb2.Request.SHOW_MESSAGE:
+        if (request.control & hal_pb2.Request.SET_COLLECTOR_ROTATION_ANGLE) > 0:
+            request.status |= hal_pb2.Response.COLLECTOR_ROTATION_ERROR
+
+        if (request.control & hal_pb2.Request.SHOW_MESSAGE) > 0:
             if request.message is not None and len(request.message) > 0:
                 success = display.show_message(request.message)
                 if not success:
