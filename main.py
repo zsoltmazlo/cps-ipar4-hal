@@ -24,13 +24,14 @@ pwr_selector = PowerSourceSelector(ext_en_pin=17, solar_en_pin=27)
 battery_source = PiJuice(bus=1, address=0x14)
 external_source = INA219(address=0x40)
 collector_source = INA219(address=0x41)
-tilt_actuator = CollectorPositioner(pca9865_address=0x60)
+collector_positioner = CollectorPositioner(pca9865_address=0x60, tilt_servo_ch=0)
 
 
 def main():
     display.clear()
     pwr_selector.select_external_source()
-    tilt_actuator.set_angle(0)
+    collector_positioner.set_tilt_angle(0)
+    collector_positioner.set_rotation_angle(0)
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sck:
         sck.bind((HOST, PORT))
@@ -86,7 +87,7 @@ def main():
 
     display.clear()
     pwr_selector.select_battery_source()
-    tilt_actuator.finish()
+    collector_positioner.finish()
     pass
 
 
@@ -145,7 +146,7 @@ def process_request(request: hal_pb2.Request):
         # read collector tilt data from sensor when all data or that specific data requested
         if (request.data & hal_pb2.Request.COLLECTOR_TILT) > 0:
             try:
-                success, angle = tilt_actuator.get_tilt_angle()
+                success, angle = collector_positioner.get_tilt_angle()
                 if success:
                     response.collectorTilt.value = angle
                     response.collectorTilt.unit = hal_pb2.Angle.DEGREE
@@ -156,6 +157,14 @@ def process_request(request: hal_pb2.Request):
 
         # read collector rotation data from sensor when all data or that specific data requested
         if (request.data & hal_pb2.Request.COLLECTOR_ROTATION) > 0:
+            try:
+                success, angle = collector_positioner.get_rotation_angle()
+                if success:
+                    response.collectorRotation.value = angle
+                    response.collectorRotation.unit = hal_pb2.Angle.DEGREE
+                else:
+                    request.status |= hal_pb2.Response.COLLECTOR_ROTATION_ERROR
+            except:
                 request.status |= hal_pb2.Response.COLLECTOR_ROTATION_ERROR
 
         # read power source state from selector when all data or that specific data requested
@@ -264,7 +273,7 @@ def process_request(request: hal_pb2.Request):
 
         if (request.control & hal_pb2.Request.SET_COLLECTOR_TILT_ANGLE) > 0:
             try:
-                success, angle = tilt_actuator.set_tilt_angle(request.angle.value)
+                success, angle = collector_positioner.set_tilt_angle(request.angle.value)
                 if success:
                     response.collectorTilt.value = angle
                     response.collectorTilt.unit = hal_pb2.Angle.DEGREE
@@ -274,7 +283,15 @@ def process_request(request: hal_pb2.Request):
                 request.status |= hal_pb2.Response.COLLECTOR_TILT_ERROR
 
         if (request.control & hal_pb2.Request.SET_COLLECTOR_ROTATION_ANGLE) > 0:
-            request.status |= hal_pb2.Response.COLLECTOR_ROTATION_ERROR
+            try:
+                success, angle = collector_positioner.set_rotation_angle(request.angle.value)
+                if success:
+                    response.collectorRotation.value = angle
+                    response.collectorRotation.unit = hal_pb2.Angle.DEGREE
+                else:
+                    request.status |= hal_pb2.Response.COLLECTOR_ROTATION_ERROR
+            except:
+                request.status |= hal_pb2.Response.COLLECTOR_ROTATION_ERROR
 
         if (request.control & hal_pb2.Request.SHOW_MESSAGE) > 0:
             if request.message is not None and len(request.message) > 0:

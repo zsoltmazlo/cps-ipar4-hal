@@ -32,7 +32,7 @@ class ServoController:
 
         # finishing setup with the actual value
         self.expander.set_pwm(0, 0, self.pulse)
-        return True, self.pulse
+        return True, self.angle
 
     def get_angle(self):
         return self.angle
@@ -40,28 +40,60 @@ class ServoController:
 
 class CollectorPositioner:
 
-    def __init__(self, pca9865_address=0x41, tilt_servo_ch=0, rotation_servo_ch=1):
+    def __init__(self, pca9865_address=0x41, tilt_servo_ch=None, rotation_servo_ch=None):
+        # TODO add output enable functionality
         self.expander = PCA9685(address=pca9865_address)
         self.expander.set_pwm_freq(60)
 
-        self.tilt_servo = ServoController(
-            expander=self.expander,
-            channel=tilt_servo_ch,
-            min_angle=0,
-            max_angle=75,
-            min_pulse=170,
-            max_pulse=390
-        )
-        self.tilt_servo.set_angle(0)
+        if tilt_servo_ch is not None:
+            self.tilt_servo = ServoController(
+                expander=self.expander,
+                channel=tilt_servo_ch,
+                min_angle=0,
+                max_angle=75,
+                min_pulse=170,
+                max_pulse=390
+            )
+            self.tilt_servo.set_angle(0)
+        else:
+            self.tilt_servo = None
+
+        if rotation_servo_ch is not None:
+            self.rotation_servo = ServoController(
+                expander=self.expander,
+                channel=tilt_servo_ch,
+                min_angle=0,
+                max_angle=75,
+                min_pulse=170,
+                max_pulse=390
+            )
+            self.rotation_servo.set_angle(0)
+        else:
+            self.rotation_servo = None
 
     def set_tilt_angle(self, angle):
-        self.tilt_servo.set_angle(angle)
-
-    def set_rotation_angle(self, angle):
-        return False, 0
+        if self.tilt_servo is None:
+            return False, 0
+        else:
+            return self.tilt_servo.set_angle(angle)
 
     def get_tilt_angle(self):
-        return self.tilt_servo.get_angle()
+        if self.tilt_servo is None:
+            return False, 0
+        else:
+            return self.tilt_servo.get_angle()
+
+    def set_rotation_angle(self, angle):
+        if self.rotation_servo is None:
+            return False, 0
+        else:
+            return self.rotation_servo.set_angle(angle)
+
+    def get_rotation_angle(self):
+        if self.rotation_servo is None:
+            return False, 0
+        else:
+            return self.rotation_servo.get_angle()
 
     def finish(self):
         self.tilt_servo.set_angle(0)

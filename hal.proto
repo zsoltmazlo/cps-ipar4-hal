@@ -203,7 +203,8 @@ message Response {
     Illuminance illuminance = 5;
     Temperature externalTemperature = 6;
     Angle collectorTilt = 7;
-    PowerSource powerSource = 8;
+    Angle collectorRotation = 8;
+    PowerSource powerSource = 9;
 
     PowerSourceDetails batteryDetails = 10;
     PowerSourceDetails externalPSDetails = 11;
