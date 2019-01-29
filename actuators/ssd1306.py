@@ -34,7 +34,10 @@ class SSD1306:
         self.draw.rectangle((0,0,14,14), fill=255, outline=255)
         self.draw.text((3, 2), "IP", fill=0)
         self.draw.rectangle((14, 0, 127, 14), fill=0, outline=255)
-        self.draw.text((18, 2), self.__get_ip_address()+":"+str(port), fill=255)
+        if port is not None:
+            self.draw.text((18, 2), self.__get_ip_address()+":"+str(port), fill=255)
+        else:
+            self.draw.text((18, 2), self.__get_ip_address(), fill=255)
         self.display.image(self.image)
         try:
             self.display.display()
@@ -62,7 +65,7 @@ class SSD1306:
 
     def show_message(self, message):
         self.mutex.acquire()
-        self.draw.rectangle((2, 36, 126, 62), fill=0, outline=0)
+        self.draw.rectangle((2, 30, 126, 62), fill=0, outline=0)
 
         y = 30
         chunks = message.split(' ')
@@ -161,3 +164,8 @@ class SSD1306:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
         return s.getsockname()[0]
+
+
+if __name__ == "__main__":
+    display = SSD1306()
+    display.show_connection_details(port=None)

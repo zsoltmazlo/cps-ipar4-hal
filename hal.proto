@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package cps.hal;
+package inf.mit.bme.hu.cpsbox.hal;
 
 // basic metrics for data
 
