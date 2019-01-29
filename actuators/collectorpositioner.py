@@ -42,34 +42,39 @@ class CollectorPositioner:
 
     def __init__(self, pca9865_address=0x41, tilt_servo_ch=None, rotation_servo_ch=None):
         # TODO add output enable functionality
-        self.expander = PCA9685(address=pca9865_address)
-        self.expander.set_pwm_freq(60)
+        try:
+            self.expander = PCA9685(address=pca9865_address)
+            self.expander.set_pwm_freq(60)
+            if tilt_servo_ch is not None:
+                self.tilt_servo = ServoController(
+                    expander=self.expander,
+                    channel=tilt_servo_ch,
+                    min_angle=0,
+                    max_angle=75,
+                    min_pulse=170,
+                    max_pulse=390
+                )
+                self.tilt_servo.set_angle(0)
+            else:
+                self.tilt_servo = None
 
-        if tilt_servo_ch is not None:
-            self.tilt_servo = ServoController(
-                expander=self.expander,
-                channel=tilt_servo_ch,
-                min_angle=0,
-                max_angle=75,
-                min_pulse=170,
-                max_pulse=390
-            )
-            self.tilt_servo.set_angle(0)
-        else:
+            if rotation_servo_ch is not None:
+                self.rotation_servo = ServoController(
+                    expander=self.expander,
+                    channel=tilt_servo_ch,
+                    min_angle=0,
+                    max_angle=75,
+                    min_pulse=170,
+                    max_pulse=390
+                )
+                self.rotation_servo.set_angle(0)
+            else:
+                self.rotation_servo = None
+        except:
+            self.expander = None
             self.tilt_servo = None
-
-        if rotation_servo_ch is not None:
-            self.rotation_servo = ServoController(
-                expander=self.expander,
-                channel=tilt_servo_ch,
-                min_angle=0,
-                max_angle=75,
-                min_pulse=170,
-                max_pulse=390
-            )
-            self.rotation_servo.set_angle(0)
-        else:
             self.rotation_servo = None
+            print("Collector positioner could not initiated")
 
     def set_tilt_angle(self, angle):
         if self.tilt_servo is None:
@@ -96,6 +101,7 @@ class CollectorPositioner:
             return self.rotation_servo.get_angle()
 
     def finish(self):
-        self.tilt_servo.set_angle(0)
+        if self.tilt_servo is not None:
+            self.tilt_servo.set_angle(0)
 
 

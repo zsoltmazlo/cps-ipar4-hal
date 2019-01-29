@@ -6,6 +6,8 @@ from PIL import ImageDraw
 from threading import Lock
 import time
 
+from PIL import ImageFont
+
 
 class SSD1306:
 
@@ -22,16 +24,17 @@ class SSD1306:
 
         # Get drawing object to draw on image.
         self.draw = ImageDraw.Draw(self.image)
+        self.draw.font = ImageFont.truetype('/home/pi/cps-gen2/Minecraftia-Regular.ttf', 8)
 
         # Draw a black filled box to clear the image.
         self.draw.rectangle((0, 0, self.display.width, self.display.height), outline=0, fill=0)
 
     def show_connection_details(self, port):
         self.mutex.acquire()
-        self.draw.rectangle((0,0,16,16), fill=255, outline=255)
-        self.draw.text((3, 3), "IP", fill=0)
-        self.draw.rectangle((16, 0, 127, 16), fill=0, outline=255)
-        self.draw.text((22, 3), self.__get_ip_address()+":"+str(port), fill=255)
+        self.draw.rectangle((0,0,14,14), fill=255, outline=255)
+        self.draw.text((3, 2), "IP", fill=0)
+        self.draw.rectangle((14, 0, 127, 14), fill=0, outline=255)
+        self.draw.text((18, 2), self.__get_ip_address()+":"+str(port), fill=255)
         self.display.image(self.image)
         try:
             self.display.display()
@@ -44,9 +47,9 @@ class SSD1306:
 
     def show_message_box(self):
         self.mutex.acquire()
-        self.draw.rectangle((0, 18, 127, 63), fill=0, outline=255)
-        self.draw.rectangle((0, 18, 127, 32), fill=255, outline=255)
-        self.draw.text((3, 20), "MESSAGE", fill=0)
+        self.draw.rectangle((0, 16, 127, 63), fill=0, outline=255)
+        self.draw.rectangle((0, 16, 127, 28), fill=255, outline=255)
+        self.draw.text((3, 17), "MESSAGE", fill=0)
 
         try:
             self.display.display()
@@ -61,25 +64,25 @@ class SSD1306:
         self.mutex.acquire()
         self.draw.rectangle((2, 36, 126, 62), fill=0, outline=0)
 
-        y = 36
+        y = 30
         chunks = message.split(' ')
         line = ''
         for chunk in chunks:
             if '\n' in chunk:
                 chunks2 = chunk.split('\n')
                 line += chunks2[0]
-                self.draw.text((5, y), line, fill=255)
-                y += 12
+                self.draw.text((3, y), line, fill=255)
+                y += 10
                 line = ''
                 chunk = chunks2[1]
 
-            if len(line)+len(chunk) > 20:
-                self.draw.text((5, y), line, fill=255)
-                y += 12
+            if len(line)+len(chunk) > 25:
+                self.draw.text((3, y), line, fill=255)
+                y += 10
                 line = ''
             line += chunk
             line += ' '
-        self.draw.text((5, y), line, fill=255)
+        self.draw.text((3, y), line, fill=255)
         self.display.image(self.image)
         try:
             self.display.display()
@@ -92,9 +95,9 @@ class SSD1306:
 
     def change_connected_status(self, connected=False):
         self.mutex.acquire()
-        self.draw.rectangle((114, 3, 124, 12), fill=0, outline=0)
+        self.draw.rectangle((114, 2, 124, 12), fill=0, outline=0)
         f = 255 if connected else 0
-        self.draw.ellipse((115, 4, 123, 12), fill=f, outline=f)
+        self.draw.ellipse((116, 3, 124, 11), fill=f, outline=f)
         self.display.image(self.image)
         try:
             self.display.display()

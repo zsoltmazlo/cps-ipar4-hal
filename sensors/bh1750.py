@@ -17,9 +17,6 @@
 #
 #---------------------------------------------------------------------
 import smbus
-import time
-
-# Define some constants from the datasheet
 
 
 class BH1750:

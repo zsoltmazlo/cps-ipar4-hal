@@ -5,25 +5,30 @@ from pprint import pprint
 from protogen import hal_pb2
 
 
-def socket_test(host, port, angle=None, message=None, source=None):
+def socket_test(host, port, tilt_angle=None, rotation_angle=None, message=None, source=None):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sck:
         sck.connect((host, port))
         print("Connected to socket, sending test data")
 
         tmp = hal_pb2.Request()
-        tmp.data = hal_pb2.Request.ALL
+        tmp.data = hal_pb2.Request.COLLECTOR_PS_STATE*2-1
 
-        if angle is not None:
-            tmp.control = hal_pb2.Request.SET_COLLECTOR_TILT_ANGLE
-            tmp.angle.value = angle
-            tmp.angle.unit = hal_pb2.Angle.DEGREE
+        if tilt_angle is not None:
+            tmp.control |= hal_pb2.Request.SET_COLLECTOR_TILT_ANGLE
+            tmp.tilt_angle.value = tilt_angle
+            tmp.tilt_angle.unit = hal_pb2.Angle.DEGREE
+
+        if rotation_angle is not None:
+            tmp.control |= hal_pb2.Request.SET_COLLECTOR_ROTATION_ANGLE
+            tmp.rotation_angle.value = rotation_angle
+            tmp.rotation_angle.unit = hal_pb2.Angle.DEGREE
 
         if message is not None:
-            tmp.control = hal_pb2.Request.SHOW_MESSAGE
+            tmp.control |= hal_pb2.Request.SHOW_MESSAGE
             tmp.message = message
 
         if source is not None:
-            tmp.control = hal_pb2.Request.SET_POWER_SOURCE
+            tmp.control |= hal_pb2.Request.SET_POWER_SOURCE
             tmp.source = source
 
         sck.sendall(tmp.SerializeToString())
