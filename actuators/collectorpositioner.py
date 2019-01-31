@@ -1,4 +1,3 @@
-import RPi.GPIO as GPIO
 import time
 from Adafruit_PCA9685 import PCA9685
 
