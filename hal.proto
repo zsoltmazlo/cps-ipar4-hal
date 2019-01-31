@@ -1,8 +1,6 @@
 syntax = "proto3";
 
-package inf.mit.bme.hu.cpsbox.hal;
-
-// basic metrics for data
+package hu.bme.mit.inf.cpsbox.hal;
 
 message Temperature {
 
@@ -161,8 +159,8 @@ message Request {
         SHOW_MESSAGE = 8;
     }
 
-    Data data = 1;
-    Control control = 2;
+    int32 data = 1;
+    int32 control = 2;
 
     PowerSource source = 3;
     Angle tilt_angle = 4;
@@ -196,7 +194,7 @@ message Response {
         SHOW_MESSAGE_ERROR = 4096;
     }
 
-    Status status = 1;
+    int32 status = 1;
     Temperature temperature = 2;
     Humidity humidity = 3;
     Pressure pressure = 4;

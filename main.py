@@ -1,12 +1,16 @@
+from pprint import pprint
+
 from pijuice import PiJuice
 from actuators.collectorpositioner import CollectorPositioner
 from protogen import hal_pb2
 import socket
-from pprint import  pprint
+import threading
 from sensors.bh1750 import BH1750
 from sensors.ina219 import INA219
 from sensors.ds18b20 import DS18B20
 from sensors.BMP280 import BMP280
+
+from google.protobuf.internal.encoder import _VarintBytes
 
 
 from actuators.ssd1306 import SSD1306
@@ -14,7 +18,7 @@ from actuators.power_source_selector import PowerSourceSelector
 
 # HOST = '127.0.0.1' # only for localhost
 HOST = '0.0.0.0' # on all interface
-PORT = 9008
+PORT = 9004
 
 pwr_selector = PowerSourceSelector(ext_en_pin=17, solar_en_pin=27)
 
@@ -27,7 +31,16 @@ external_source = INA219(address=0x40)
 collector_source = INA219(address=0x41)
 collector_positioner = CollectorPositioner(pca9865_address=0x60, tilt_servo_ch=0)
 
+
+def display_handler_task():
+
+
+    # start
+    pass
+
+
 def main():
+    # threading.Thread(target=display_handler_task).start()
     display.clear()
     pwr_selector.select_external_source()
     if collector_positioner is not None:
@@ -61,7 +74,13 @@ def main():
 
                         try:
                             request.ParseFromString(request_raw)
+                            print("Request:")
+                            pprint(request)
                             response = process_request(request)
+                            print("Response:")
+                            pprint(response)
+                            size = response.ByteSize()
+                            conn.send(_VarintBytes(size))
                             conn.sendall(response.SerializeToString())
                         except:
                             print("Error during decoding message")

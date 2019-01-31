@@ -18,15 +18,15 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='hal.proto',
-  package='cps.hal',
+  package='hu.bme.mit.inf.cpsbox.hal',
   syntax='proto3',
-  serialized_pb=_b('\n\thal.proto\x12\x07\x63ps.hal\"\x84\x01\n\x0bTemperature\x12\r\n\x05value\x18\x01 \x01(\x02\x12\'\n\x04unit\x18\x02 \x01(\x0e\x32\x19.cps.hal.Temperature.Unit\"=\n\x04Unit\x12\r\n\tUNDEFINED\x10\x00\x12\x0b\n\x07\x43\x45LSIUS\x10\x01\x12\r\n\tFARENHEIT\x10\x02\x12\n\n\x06KELVIN\x10\x03\"\x9b\x01\n\x08Humidity\x12\r\n\x05value\x18\x01 \x01(\x02\x12$\n\x04unit\x18\x02 \x01(\x0e\x32\x16.cps.hal.Humidity.Unit\"Z\n\x04Unit\x12\r\n\tUNDEFINED\x10\x00\x12\x15\n\x11RELATIVE_HUMIDITY\x10\x01\x12\x15\n\x11\x41\x42SOLUTE_HUMIDITY\x10\x02\x12\x15\n\x11SPECIFIC_HUMIDITY\x10\x03\"\xaa\x01\n\x08Pressure\x12\r\n\x05value\x18\x01 \x01(\x02\x12$\n\x04unit\x18\x02 \x01(\x0e\x32\x16.cps.hal.Pressure.Unit\"i\n\x04Unit\x12\r\n\tUNDEFINED\x10\x00\x12\n\n\x06PASCAL\x10\x01\x12\x0f\n\x0bHECTOPASCAL\x10\x02\x12\x0e\n\nKILOPASCAL\x10\x03\x12\x0e\n\nATMOSPHERE\x10\x04\x12\x07\n\x03\x42\x41R\x10\x05\x12\x0c\n\x08MILLIBAR\x10\x06\"m\n\x07Voltage\x12\r\n\x05value\x18\x01 \x01(\x02\x12#\n\x04unit\x18\x02 \x01(\x0e\x32\x15.cps.hal.Voltage.Unit\".\n\x04Unit\x12\r\n\tUNDEFINED\x10\x00\x12\r\n\tMILLIVOLT\x10\x01\x12\x08\n\x04VOLT\x10\x02\"o\n\x07\x43urrent\x12\r\n\x05value\x18\x01 \x01(\x02\x12#\n\x04unit\x18\x02 \x01(\x0e\x32\x15.cps.hal.Current.Unit\"0\n\x04Unit\x12\r\n\tUNDEFINED\x10\x00\x12\x0e\n\nMILLIAMPER\x10\x01\x12\t\n\x05\x41MPER\x10\x02\"e\n\x0bIlluminance\x12\r\n\x05value\x18\x01 \x01(\x02\x12\'\n\x04unit\x18\x02 \x01(\x0e\x32\x19.cps.hal.Illuminance.Unit\"\x1e\n\x04Unit\x12\r\n\tUNDEFINED\x10\x00\x12\x07\n\x03LUX\x10\x01\"u\n\x05\x41ngle\x12\r\n\x05value\x18\x01 \x01(\x02\x12!\n\x04unit\x18\x02 \x01(\x0e\x32\x13.cps.hal.Angle.Unit\":\n\x04Unit\x12\r\n\tUNDEFINED\x10\x00\x12\n\n\x06RADIAN\x10\x01\x12\x0b\n\x07GRADIAN\x10\x02\x12\n\n\x06\x44\x45GREE\x10\x03\"\x8d\x06\n\x07Request\x12#\n\x04\x64\x61ta\x18\x01 \x01(\x0e\x32\x15.cps.hal.Request.Data\x12)\n\x07\x63ontrol\x18\x02 \x01(\x0e\x32\x18.cps.hal.Request.Control\x12$\n\x06source\x18\x03 \x01(\x0e\x32\x14.cps.hal.PowerSource\x12\"\n\ntilt_angle\x18\x04 \x01(\x0b\x32\x0e.cps.hal.Angle\x12&\n\x0erotation_angle\x18\x05 \x01(\x0b\x32\x0e.cps.hal.Angle\x12\x0f\n\x07message\x18\x06 \x01(\t\"\xae\x03\n\x04\x44\x61ta\x12\r\n\tNO_THANKS\x10\x00\x12\x18\n\x14INTERNAL_TEMPERATURE\x10\x01\x12\x15\n\x11INTERNAL_HUMIDITY\x10\x02\x12\x15\n\x11INTERNAL_PRESSURE\x10\x04\x12\x18\n\x14INTERNAL_ILLUMINANCE\x10\x08\x12\x18\n\x14\x45XTERNAL_TEMPERATURE\x10\x10\x12\x12\n\x0e\x43OLLECTOR_TILT\x10 \x12\x16\n\x12\x43OLLECTOR_ROTATION\x10@\x12\x11\n\x0cPOWER_SOURCE\x10\x80\x01\x12\x14\n\x0f\x42\x41TTERY_VOLTAGE\x10\x80\x02\x12\x14\n\x0f\x42\x41TTERY_CURRENT\x10\x80\x04\x12\x12\n\rBATTERY_STATE\x10\x80\x08\x12\x18\n\x13\x45XTERNAL_PS_VOLTAGE\x10\x80\x10\x12\x18\n\x13\x45XTERNAL_PS_CURRENT\x10\x80 \x12\x16\n\x11\x45XTERNAL_PS_STATE\x10\x80@\x12\x1a\n\x14\x43OLLECTOR_PS_VOLTAGE\x10\x80\x80\x01\x12\x1a\n\x14\x43OLLECTOR_PS_CURRENT\x10\x80\x80\x02\x12\x18\n\x12\x43OLLECTOR_PS_STATE\x10\x80\x80\x04\"~\n\x07\x43ontrol\x12\x0b\n\x07NOTHING\x10\x00\x12\x14\n\x10SET_POWER_SOURCE\x10\x01\x12\x1c\n\x18SET_COLLECTOR_TILT_ANGLE\x10\x02\x12 \n\x1cSET_COLLECTOR_ROTATION_ANGLE\x10\x04\x12\x10\n\x0cSHOW_MESSAGE\x10\x08\"i\n\x12PowerSourceDetails\x12!\n\x07voltage\x18\x01 \x01(\x0b\x32\x10.cps.hal.Voltage\x12!\n\x07\x63urrent\x18\x02 \x01(\x0b\x32\x10.cps.hal.Current\x12\r\n\x05state\x18\x03 \x01(\t\"\xf7\x06\n\x08Response\x12(\n\x06status\x18\x01 \x01(\x0e\x32\x18.cps.hal.Response.Status\x12)\n\x0btemperature\x18\x02 \x01(\x0b\x32\x14.cps.hal.Temperature\x12#\n\x08humidity\x18\x03 \x01(\x0b\x32\x11.cps.hal.Humidity\x12#\n\x08pressure\x18\x04 \x01(\x0b\x32\x11.cps.hal.Pressure\x12)\n\x0billuminance\x18\x05 \x01(\x0b\x32\x14.cps.hal.Illuminance\x12\x31\n\x13\x65xternalTemperature\x18\x06 \x01(\x0b\x32\x14.cps.hal.Temperature\x12%\n\rcollectorTilt\x18\x07 \x01(\x0b\x32\x0e.cps.hal.Angle\x12)\n\x11\x63ollectorRotation\x18\x08 \x01(\x0b\x32\x0e.cps.hal.Angle\x12)\n\x0bpowerSource\x18\t \x01(\x0e\x32\x14.cps.hal.PowerSource\x12\x33\n\x0e\x62\x61tteryDetails\x18\n \x01(\x0b\x32\x1b.cps.hal.PowerSourceDetails\x12\x36\n\x11\x65xternalPSDetails\x18\x0b \x01(\x0b\x32\x1b.cps.hal.PowerSourceDetails\x12\x37\n\x12\x63ollectorPSDetails\x18\x0c \x01(\x0b\x32\x1b.cps.hal.PowerSourceDetails\"\xca\x02\n\x06Status\x12\x06\n\x02OK\x10\x00\x12\x18\n\x14UNRECOGNISED_REQUEST\x10\x01\x12\x19\n\x15INT_TEMPERATURE_ERROR\x10\x02\x12\x13\n\x0fHUMIDITIY_ERROR\x10\x04\x12\x12\n\x0ePRESSURE_ERROR\x10\x08\x12\x15\n\x11ILLUMINANCE_ERROR\x10\x10\x12\x19\n\x15\x45XT_TEMPERATURE_ERROR\x10 \x12\x18\n\x14\x43OLLECTOR_TILT_ERROR\x10@\x12\x1d\n\x18\x43OLLECTOR_ROTATION_ERROR\x10\x80\x01\x12\x12\n\rBATTERY_ERROR\x10\x80\x02\x12\x13\n\x0e\x45XTERNAL_ERROR\x10\x80\x04\x12\x14\n\x0f\x43OLLECTOR_ERROR\x10\x80\x08\x12\x17\n\x12POWER_SOURCE_ERROR\x10\x80\x10\x12\x17\n\x12SHOW_MESSAGE_ERROR\x10\x80 *F\n\x0bPowerSource\x12\r\n\tUNDEFINED\x10\x00\x12\x0b\n\x07\x42\x41TTERY\x10\x01\x12\x0c\n\x08\x45XTERNAL\x10\x02\x12\r\n\tCOLLECTOR\x10\x03\x62\x06proto3')
+  serialized_pb=_b('\n\thal.proto\x12\x19hu.bme.mit.inf.cpsbox.hal\"\x96\x01\n\x0bTemperature\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x39\n\x04unit\x18\x02 \x01(\x0e\x32+.hu.bme.mit.inf.cpsbox.hal.Temperature.Unit\"=\n\x04Unit\x12\r\n\tUNDEFINED\x10\x00\x12\x0b\n\x07\x43\x45LSIUS\x10\x01\x12\r\n\tFARENHEIT\x10\x02\x12\n\n\x06KELVIN\x10\x03\"\xad\x01\n\x08Humidity\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x36\n\x04unit\x18\x02 \x01(\x0e\x32(.hu.bme.mit.inf.cpsbox.hal.Humidity.Unit\"Z\n\x04Unit\x12\r\n\tUNDEFINED\x10\x00\x12\x15\n\x11RELATIVE_HUMIDITY\x10\x01\x12\x15\n\x11\x41\x42SOLUTE_HUMIDITY\x10\x02\x12\x15\n\x11SPECIFIC_HUMIDITY\x10\x03\"\xbc\x01\n\x08Pressure\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x36\n\x04unit\x18\x02 \x01(\x0e\x32(.hu.bme.mit.inf.cpsbox.hal.Pressure.Unit\"i\n\x04Unit\x12\r\n\tUNDEFINED\x10\x00\x12\n\n\x06PASCAL\x10\x01\x12\x0f\n\x0bHECTOPASCAL\x10\x02\x12\x0e\n\nKILOPASCAL\x10\x03\x12\x0e\n\nATMOSPHERE\x10\x04\x12\x07\n\x03\x42\x41R\x10\x05\x12\x0c\n\x08MILLIBAR\x10\x06\"\x7f\n\x07Voltage\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x35\n\x04unit\x18\x02 \x01(\x0e\x32\'.hu.bme.mit.inf.cpsbox.hal.Voltage.Unit\".\n\x04Unit\x12\r\n\tUNDEFINED\x10\x00\x12\r\n\tMILLIVOLT\x10\x01\x12\x08\n\x04VOLT\x10\x02\"\x81\x01\n\x07\x43urrent\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x35\n\x04unit\x18\x02 \x01(\x0e\x32\'.hu.bme.mit.inf.cpsbox.hal.Current.Unit\"0\n\x04Unit\x12\r\n\tUNDEFINED\x10\x00\x12\x0e\n\nMILLIAMPER\x10\x01\x12\t\n\x05\x41MPER\x10\x02\"w\n\x0bIlluminance\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x39\n\x04unit\x18\x02 \x01(\x0e\x32+.hu.bme.mit.inf.cpsbox.hal.Illuminance.Unit\"\x1e\n\x04Unit\x12\r\n\tUNDEFINED\x10\x00\x12\x07\n\x03LUX\x10\x01\"\x87\x01\n\x05\x41ngle\x12\r\n\x05value\x18\x01 \x01(\x02\x12\x33\n\x04unit\x18\x02 \x01(\x0e\x32%.hu.bme.mit.inf.cpsbox.hal.Angle.Unit\":\n\x04Unit\x12\r\n\tUNDEFINED\x10\x00\x12\n\n\x06RADIAN\x10\x01\x12\x0b\n\x07GRADIAN\x10\x02\x12\n\n\x06\x44\x45GREE\x10\x03\"\x92\x06\n\x07Request\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x05\x12\x0f\n\x07\x63ontrol\x18\x02 \x01(\x05\x12\x36\n\x06source\x18\x03 \x01(\x0e\x32&.hu.bme.mit.inf.cpsbox.hal.PowerSource\x12\x34\n\ntilt_angle\x18\x04 \x01(\x0b\x32 .hu.bme.mit.inf.cpsbox.hal.Angle\x12\x38\n\x0erotation_angle\x18\x05 \x01(\x0b\x32 .hu.bme.mit.inf.cpsbox.hal.Angle\x12\x0f\n\x07message\x18\x06 \x01(\t\"\xae\x03\n\x04\x44\x61ta\x12\r\n\tNO_THANKS\x10\x00\x12\x18\n\x14INTERNAL_TEMPERATURE\x10\x01\x12\x15\n\x11INTERNAL_HUMIDITY\x10\x02\x12\x15\n\x11INTERNAL_PRESSURE\x10\x04\x12\x18\n\x14INTERNAL_ILLUMINANCE\x10\x08\x12\x18\n\x14\x45XTERNAL_TEMPERATURE\x10\x10\x12\x12\n\x0e\x43OLLECTOR_TILT\x10 \x12\x16\n\x12\x43OLLECTOR_ROTATION\x10@\x12\x11\n\x0cPOWER_SOURCE\x10\x80\x01\x12\x14\n\x0f\x42\x41TTERY_VOLTAGE\x10\x80\x02\x12\x14\n\x0f\x42\x41TTERY_CURRENT\x10\x80\x04\x12\x12\n\rBATTERY_STATE\x10\x80\x08\x12\x18\n\x13\x45XTERNAL_PS_VOLTAGE\x10\x80\x10\x12\x18\n\x13\x45XTERNAL_PS_CURRENT\x10\x80 \x12\x16\n\x11\x45XTERNAL_PS_STATE\x10\x80@\x12\x1a\n\x14\x43OLLECTOR_PS_VOLTAGE\x10\x80\x80\x01\x12\x1a\n\x14\x43OLLECTOR_PS_CURRENT\x10\x80\x80\x02\x12\x18\n\x12\x43OLLECTOR_PS_STATE\x10\x80\x80\x04\"~\n\x07\x43ontrol\x12\x0b\n\x07NOTHING\x10\x00\x12\x14\n\x10SET_POWER_SOURCE\x10\x01\x12\x1c\n\x18SET_COLLECTOR_TILT_ANGLE\x10\x02\x12 \n\x1cSET_COLLECTOR_ROTATION_ANGLE\x10\x04\x12\x10\n\x0cSHOW_MESSAGE\x10\x08\"\x8d\x01\n\x12PowerSourceDetails\x12\x33\n\x07voltage\x18\x01 \x01(\x0b\x32\".hu.bme.mit.inf.cpsbox.hal.Voltage\x12\x33\n\x07\x63urrent\x18\x02 \x01(\x0b\x32\".hu.bme.mit.inf.cpsbox.hal.Current\x12\r\n\x05state\x18\x03 \x01(\t\"\xa3\x08\n\x08Response\x12\x0e\n\x06status\x18\x01 \x01(\x05\x12;\n\x0btemperature\x18\x02 \x01(\x0b\x32&.hu.bme.mit.inf.cpsbox.hal.Temperature\x12\x35\n\x08humidity\x18\x03 \x01(\x0b\x32#.hu.bme.mit.inf.cpsbox.hal.Humidity\x12\x35\n\x08pressure\x18\x04 \x01(\x0b\x32#.hu.bme.mit.inf.cpsbox.hal.Pressure\x12;\n\x0billuminance\x18\x05 \x01(\x0b\x32&.hu.bme.mit.inf.cpsbox.hal.Illuminance\x12\x43\n\x13\x65xternalTemperature\x18\x06 \x01(\x0b\x32&.hu.bme.mit.inf.cpsbox.hal.Temperature\x12\x37\n\rcollectorTilt\x18\x07 \x01(\x0b\x32 .hu.bme.mit.inf.cpsbox.hal.Angle\x12;\n\x11\x63ollectorRotation\x18\x08 \x01(\x0b\x32 .hu.bme.mit.inf.cpsbox.hal.Angle\x12;\n\x0bpowerSource\x18\t \x01(\x0e\x32&.hu.bme.mit.inf.cpsbox.hal.PowerSource\x12\x45\n\x0e\x62\x61tteryDetails\x18\n \x01(\x0b\x32-.hu.bme.mit.inf.cpsbox.hal.PowerSourceDetails\x12H\n\x11\x65xternalPSDetails\x18\x0b \x01(\x0b\x32-.hu.bme.mit.inf.cpsbox.hal.PowerSourceDetails\x12I\n\x12\x63ollectorPSDetails\x18\x0c \x01(\x0b\x32-.hu.bme.mit.inf.cpsbox.hal.PowerSourceDetails\"\xca\x02\n\x06Status\x12\x06\n\x02OK\x10\x00\x12\x18\n\x14UNRECOGNISED_REQUEST\x10\x01\x12\x19\n\x15INT_TEMPERATURE_ERROR\x10\x02\x12\x13\n\x0fHUMIDITIY_ERROR\x10\x04\x12\x12\n\x0ePRESSURE_ERROR\x10\x08\x12\x15\n\x11ILLUMINANCE_ERROR\x10\x10\x12\x19\n\x15\x45XT_TEMPERATURE_ERROR\x10 \x12\x18\n\x14\x43OLLECTOR_TILT_ERROR\x10@\x12\x1d\n\x18\x43OLLECTOR_ROTATION_ERROR\x10\x80\x01\x12\x12\n\rBATTERY_ERROR\x10\x80\x02\x12\x13\n\x0e\x45XTERNAL_ERROR\x10\x80\x04\x12\x14\n\x0f\x43OLLECTOR_ERROR\x10\x80\x08\x12\x17\n\x12POWER_SOURCE_ERROR\x10\x80\x10\x12\x17\n\x12SHOW_MESSAGE_ERROR\x10\x80 *F\n\x0bPowerSource\x12\r\n\tUNDEFINED\x10\x00\x12\x0b\n\x07\x42\x41TTERY\x10\x01\x12\x0c\n\x08\x45XTERNAL\x10\x02\x12\r\n\tCOLLECTOR\x10\x03\x62\x06proto3')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 _POWERSOURCE = _descriptor.EnumDescriptor(
   name='PowerSource',
-  full_name='cps.hal.PowerSource',
+  full_name='hu.bme.mit.inf.cpsbox.hal.PowerSource',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -49,8 +49,8 @@ _POWERSOURCE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2715,
-  serialized_end=2785,
+  serialized_start=3075,
+  serialized_end=3145,
 )
 _sym_db.RegisterEnumDescriptor(_POWERSOURCE)
 
@@ -63,7 +63,7 @@ COLLECTOR = 3
 
 _TEMPERATURE_UNIT = _descriptor.EnumDescriptor(
   name='Unit',
-  full_name='cps.hal.Temperature.Unit',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Temperature.Unit',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -86,14 +86,14 @@ _TEMPERATURE_UNIT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=94,
-  serialized_end=155,
+  serialized_start=130,
+  serialized_end=191,
 )
 _sym_db.RegisterEnumDescriptor(_TEMPERATURE_UNIT)
 
 _HUMIDITY_UNIT = _descriptor.EnumDescriptor(
   name='Unit',
-  full_name='cps.hal.Humidity.Unit',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Humidity.Unit',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -116,14 +116,14 @@ _HUMIDITY_UNIT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=223,
-  serialized_end=313,
+  serialized_start=277,
+  serialized_end=367,
 )
 _sym_db.RegisterEnumDescriptor(_HUMIDITY_UNIT)
 
 _PRESSURE_UNIT = _descriptor.EnumDescriptor(
   name='Unit',
-  full_name='cps.hal.Pressure.Unit',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Pressure.Unit',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -158,14 +158,14 @@ _PRESSURE_UNIT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=381,
-  serialized_end=486,
+  serialized_start=453,
+  serialized_end=558,
 )
 _sym_db.RegisterEnumDescriptor(_PRESSURE_UNIT)
 
 _VOLTAGE_UNIT = _descriptor.EnumDescriptor(
   name='Unit',
-  full_name='cps.hal.Voltage.Unit',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Voltage.Unit',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -184,14 +184,14 @@ _VOLTAGE_UNIT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=551,
-  serialized_end=597,
+  serialized_start=641,
+  serialized_end=687,
 )
 _sym_db.RegisterEnumDescriptor(_VOLTAGE_UNIT)
 
 _CURRENT_UNIT = _descriptor.EnumDescriptor(
   name='Unit',
-  full_name='cps.hal.Current.Unit',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Current.Unit',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -210,14 +210,14 @@ _CURRENT_UNIT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=662,
-  serialized_end=710,
+  serialized_start=771,
+  serialized_end=819,
 )
 _sym_db.RegisterEnumDescriptor(_CURRENT_UNIT)
 
 _ILLUMINANCE_UNIT = _descriptor.EnumDescriptor(
   name='Unit',
-  full_name='cps.hal.Illuminance.Unit',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Illuminance.Unit',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -232,14 +232,14 @@ _ILLUMINANCE_UNIT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=783,
-  serialized_end=813,
+  serialized_start=910,
+  serialized_end=940,
 )
 _sym_db.RegisterEnumDescriptor(_ILLUMINANCE_UNIT)
 
 _ANGLE_UNIT = _descriptor.EnumDescriptor(
   name='Unit',
-  full_name='cps.hal.Angle.Unit',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Angle.Unit',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -262,14 +262,14 @@ _ANGLE_UNIT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=874,
-  serialized_end=932,
+  serialized_start=1020,
+  serialized_end=1078,
 )
 _sym_db.RegisterEnumDescriptor(_ANGLE_UNIT)
 
 _REQUEST_DATA = _descriptor.EnumDescriptor(
   name='Data',
-  full_name='cps.hal.Request.Data',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Request.Data',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -348,14 +348,14 @@ _REQUEST_DATA = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1158,
-  serialized_end=1588,
+  serialized_start=1309,
+  serialized_end=1739,
 )
 _sym_db.RegisterEnumDescriptor(_REQUEST_DATA)
 
 _REQUEST_CONTROL = _descriptor.EnumDescriptor(
   name='Control',
-  full_name='cps.hal.Request.Control',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Request.Control',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -382,14 +382,14 @@ _REQUEST_CONTROL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1590,
-  serialized_end=1716,
+  serialized_start=1741,
+  serialized_end=1867,
 )
 _sym_db.RegisterEnumDescriptor(_REQUEST_CONTROL)
 
 _RESPONSE_STATUS = _descriptor.EnumDescriptor(
   name='Status',
-  full_name='cps.hal.Response.Status',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Response.Status',
   filename=None,
   file=DESCRIPTOR,
   values=[
@@ -452,28 +452,28 @@ _RESPONSE_STATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2383,
-  serialized_end=2713,
+  serialized_start=2743,
+  serialized_end=3073,
 )
 _sym_db.RegisterEnumDescriptor(_RESPONSE_STATUS)
 
 
 _TEMPERATURE = _descriptor.Descriptor(
   name='Temperature',
-  full_name='cps.hal.Temperature',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Temperature',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='value', full_name='cps.hal.Temperature.value', index=0,
+      name='value', full_name='hu.bme.mit.inf.cpsbox.hal.Temperature.value', index=0,
       number=1, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='unit', full_name='cps.hal.Temperature.unit', index=1,
+      name='unit', full_name='hu.bme.mit.inf.cpsbox.hal.Temperature.unit', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -492,27 +492,27 @@ _TEMPERATURE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=23,
-  serialized_end=155,
+  serialized_start=41,
+  serialized_end=191,
 )
 
 
 _HUMIDITY = _descriptor.Descriptor(
   name='Humidity',
-  full_name='cps.hal.Humidity',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Humidity',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='value', full_name='cps.hal.Humidity.value', index=0,
+      name='value', full_name='hu.bme.mit.inf.cpsbox.hal.Humidity.value', index=0,
       number=1, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='unit', full_name='cps.hal.Humidity.unit', index=1,
+      name='unit', full_name='hu.bme.mit.inf.cpsbox.hal.Humidity.unit', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -531,27 +531,27 @@ _HUMIDITY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=158,
-  serialized_end=313,
+  serialized_start=194,
+  serialized_end=367,
 )
 
 
 _PRESSURE = _descriptor.Descriptor(
   name='Pressure',
-  full_name='cps.hal.Pressure',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Pressure',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='value', full_name='cps.hal.Pressure.value', index=0,
+      name='value', full_name='hu.bme.mit.inf.cpsbox.hal.Pressure.value', index=0,
       number=1, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='unit', full_name='cps.hal.Pressure.unit', index=1,
+      name='unit', full_name='hu.bme.mit.inf.cpsbox.hal.Pressure.unit', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -570,27 +570,27 @@ _PRESSURE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=316,
-  serialized_end=486,
+  serialized_start=370,
+  serialized_end=558,
 )
 
 
 _VOLTAGE = _descriptor.Descriptor(
   name='Voltage',
-  full_name='cps.hal.Voltage',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Voltage',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='value', full_name='cps.hal.Voltage.value', index=0,
+      name='value', full_name='hu.bme.mit.inf.cpsbox.hal.Voltage.value', index=0,
       number=1, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='unit', full_name='cps.hal.Voltage.unit', index=1,
+      name='unit', full_name='hu.bme.mit.inf.cpsbox.hal.Voltage.unit', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -609,27 +609,27 @@ _VOLTAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=488,
-  serialized_end=597,
+  serialized_start=560,
+  serialized_end=687,
 )
 
 
 _CURRENT = _descriptor.Descriptor(
   name='Current',
-  full_name='cps.hal.Current',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Current',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='value', full_name='cps.hal.Current.value', index=0,
+      name='value', full_name='hu.bme.mit.inf.cpsbox.hal.Current.value', index=0,
       number=1, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='unit', full_name='cps.hal.Current.unit', index=1,
+      name='unit', full_name='hu.bme.mit.inf.cpsbox.hal.Current.unit', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -648,27 +648,27 @@ _CURRENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=599,
-  serialized_end=710,
+  serialized_start=690,
+  serialized_end=819,
 )
 
 
 _ILLUMINANCE = _descriptor.Descriptor(
   name='Illuminance',
-  full_name='cps.hal.Illuminance',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Illuminance',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='value', full_name='cps.hal.Illuminance.value', index=0,
+      name='value', full_name='hu.bme.mit.inf.cpsbox.hal.Illuminance.value', index=0,
       number=1, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='unit', full_name='cps.hal.Illuminance.unit', index=1,
+      name='unit', full_name='hu.bme.mit.inf.cpsbox.hal.Illuminance.unit', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -687,27 +687,27 @@ _ILLUMINANCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=712,
-  serialized_end=813,
+  serialized_start=821,
+  serialized_end=940,
 )
 
 
 _ANGLE = _descriptor.Descriptor(
   name='Angle',
-  full_name='cps.hal.Angle',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Angle',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='value', full_name='cps.hal.Angle.value', index=0,
+      name='value', full_name='hu.bme.mit.inf.cpsbox.hal.Angle.value', index=0,
       number=1, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='unit', full_name='cps.hal.Angle.unit', index=1,
+      name='unit', full_name='hu.bme.mit.inf.cpsbox.hal.Angle.unit', index=1,
       number=2, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -726,55 +726,55 @@ _ANGLE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=815,
-  serialized_end=932,
+  serialized_start=943,
+  serialized_end=1078,
 )
 
 
 _REQUEST = _descriptor.Descriptor(
   name='Request',
-  full_name='cps.hal.Request',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Request',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='data', full_name='cps.hal.Request.data', index=0,
-      number=1, type=14, cpp_type=8, label=1,
+      name='data', full_name='hu.bme.mit.inf.cpsbox.hal.Request.data', index=0,
+      number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='control', full_name='cps.hal.Request.control', index=1,
-      number=2, type=14, cpp_type=8, label=1,
+      name='control', full_name='hu.bme.mit.inf.cpsbox.hal.Request.control', index=1,
+      number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='source', full_name='cps.hal.Request.source', index=2,
+      name='source', full_name='hu.bme.mit.inf.cpsbox.hal.Request.source', index=2,
       number=3, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='tilt_angle', full_name='cps.hal.Request.tilt_angle', index=3,
+      name='tilt_angle', full_name='hu.bme.mit.inf.cpsbox.hal.Request.tilt_angle', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='rotation_angle', full_name='cps.hal.Request.rotation_angle', index=4,
+      name='rotation_angle', full_name='hu.bme.mit.inf.cpsbox.hal.Request.rotation_angle', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='message', full_name='cps.hal.Request.message', index=5,
+      name='message', full_name='hu.bme.mit.inf.cpsbox.hal.Request.message', index=5,
       number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -794,34 +794,34 @@ _REQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=935,
-  serialized_end=1716,
+  serialized_start=1081,
+  serialized_end=1867,
 )
 
 
 _POWERSOURCEDETAILS = _descriptor.Descriptor(
   name='PowerSourceDetails',
-  full_name='cps.hal.PowerSourceDetails',
+  full_name='hu.bme.mit.inf.cpsbox.hal.PowerSourceDetails',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='voltage', full_name='cps.hal.PowerSourceDetails.voltage', index=0,
+      name='voltage', full_name='hu.bme.mit.inf.cpsbox.hal.PowerSourceDetails.voltage', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='current', full_name='cps.hal.PowerSourceDetails.current', index=1,
+      name='current', full_name='hu.bme.mit.inf.cpsbox.hal.PowerSourceDetails.current', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='state', full_name='cps.hal.PowerSourceDetails.state', index=2,
+      name='state', full_name='hu.bme.mit.inf.cpsbox.hal.PowerSourceDetails.state', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -839,97 +839,97 @@ _POWERSOURCEDETAILS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1718,
-  serialized_end=1823,
+  serialized_start=1870,
+  serialized_end=2011,
 )
 
 
 _RESPONSE = _descriptor.Descriptor(
   name='Response',
-  full_name='cps.hal.Response',
+  full_name='hu.bme.mit.inf.cpsbox.hal.Response',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='status', full_name='cps.hal.Response.status', index=0,
-      number=1, type=14, cpp_type=8, label=1,
+      name='status', full_name='hu.bme.mit.inf.cpsbox.hal.Response.status', index=0,
+      number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='temperature', full_name='cps.hal.Response.temperature', index=1,
+      name='temperature', full_name='hu.bme.mit.inf.cpsbox.hal.Response.temperature', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='humidity', full_name='cps.hal.Response.humidity', index=2,
+      name='humidity', full_name='hu.bme.mit.inf.cpsbox.hal.Response.humidity', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='pressure', full_name='cps.hal.Response.pressure', index=3,
+      name='pressure', full_name='hu.bme.mit.inf.cpsbox.hal.Response.pressure', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='illuminance', full_name='cps.hal.Response.illuminance', index=4,
+      name='illuminance', full_name='hu.bme.mit.inf.cpsbox.hal.Response.illuminance', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='externalTemperature', full_name='cps.hal.Response.externalTemperature', index=5,
+      name='externalTemperature', full_name='hu.bme.mit.inf.cpsbox.hal.Response.externalTemperature', index=5,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='collectorTilt', full_name='cps.hal.Response.collectorTilt', index=6,
+      name='collectorTilt', full_name='hu.bme.mit.inf.cpsbox.hal.Response.collectorTilt', index=6,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='collectorRotation', full_name='cps.hal.Response.collectorRotation', index=7,
+      name='collectorRotation', full_name='hu.bme.mit.inf.cpsbox.hal.Response.collectorRotation', index=7,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='powerSource', full_name='cps.hal.Response.powerSource', index=8,
+      name='powerSource', full_name='hu.bme.mit.inf.cpsbox.hal.Response.powerSource', index=8,
       number=9, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='batteryDetails', full_name='cps.hal.Response.batteryDetails', index=9,
+      name='batteryDetails', full_name='hu.bme.mit.inf.cpsbox.hal.Response.batteryDetails', index=9,
       number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='externalPSDetails', full_name='cps.hal.Response.externalPSDetails', index=10,
+      name='externalPSDetails', full_name='hu.bme.mit.inf.cpsbox.hal.Response.externalPSDetails', index=10,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='collectorPSDetails', full_name='cps.hal.Response.collectorPSDetails', index=11,
+      name='collectorPSDetails', full_name='hu.bme.mit.inf.cpsbox.hal.Response.collectorPSDetails', index=11,
       number=12, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -948,8 +948,8 @@ _RESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1826,
-  serialized_end=2713,
+  serialized_start=2014,
+  serialized_end=3073,
 )
 
 _TEMPERATURE.fields_by_name['unit'].enum_type = _TEMPERATURE_UNIT
@@ -966,8 +966,6 @@ _ILLUMINANCE.fields_by_name['unit'].enum_type = _ILLUMINANCE_UNIT
 _ILLUMINANCE_UNIT.containing_type = _ILLUMINANCE
 _ANGLE.fields_by_name['unit'].enum_type = _ANGLE_UNIT
 _ANGLE_UNIT.containing_type = _ANGLE
-_REQUEST.fields_by_name['data'].enum_type = _REQUEST_DATA
-_REQUEST.fields_by_name['control'].enum_type = _REQUEST_CONTROL
 _REQUEST.fields_by_name['source'].enum_type = _POWERSOURCE
 _REQUEST.fields_by_name['tilt_angle'].message_type = _ANGLE
 _REQUEST.fields_by_name['rotation_angle'].message_type = _ANGLE
@@ -975,7 +973,6 @@ _REQUEST_DATA.containing_type = _REQUEST
 _REQUEST_CONTROL.containing_type = _REQUEST
 _POWERSOURCEDETAILS.fields_by_name['voltage'].message_type = _VOLTAGE
 _POWERSOURCEDETAILS.fields_by_name['current'].message_type = _CURRENT
-_RESPONSE.fields_by_name['status'].enum_type = _RESPONSE_STATUS
 _RESPONSE.fields_by_name['temperature'].message_type = _TEMPERATURE
 _RESPONSE.fields_by_name['humidity'].message_type = _HUMIDITY
 _RESPONSE.fields_by_name['pressure'].message_type = _PRESSURE
@@ -1003,70 +1000,70 @@ DESCRIPTOR.enum_types_by_name['PowerSource'] = _POWERSOURCE
 Temperature = _reflection.GeneratedProtocolMessageType('Temperature', (_message.Message,), dict(
   DESCRIPTOR = _TEMPERATURE,
   __module__ = 'hal_pb2'
-  # @@protoc_insertion_point(class_scope:cps.hal.Temperature)
+  # @@protoc_insertion_point(class_scope:hu.bme.mit.inf.cpsbox.hal.Temperature)
   ))
 _sym_db.RegisterMessage(Temperature)
 
 Humidity = _reflection.GeneratedProtocolMessageType('Humidity', (_message.Message,), dict(
   DESCRIPTOR = _HUMIDITY,
   __module__ = 'hal_pb2'
-  # @@protoc_insertion_point(class_scope:cps.hal.Humidity)
+  # @@protoc_insertion_point(class_scope:hu.bme.mit.inf.cpsbox.hal.Humidity)
   ))
 _sym_db.RegisterMessage(Humidity)
 
 Pressure = _reflection.GeneratedProtocolMessageType('Pressure', (_message.Message,), dict(
   DESCRIPTOR = _PRESSURE,
   __module__ = 'hal_pb2'
-  # @@protoc_insertion_point(class_scope:cps.hal.Pressure)
+  # @@protoc_insertion_point(class_scope:hu.bme.mit.inf.cpsbox.hal.Pressure)
   ))
 _sym_db.RegisterMessage(Pressure)
 
 Voltage = _reflection.GeneratedProtocolMessageType('Voltage', (_message.Message,), dict(
   DESCRIPTOR = _VOLTAGE,
   __module__ = 'hal_pb2'
-  # @@protoc_insertion_point(class_scope:cps.hal.Voltage)
+  # @@protoc_insertion_point(class_scope:hu.bme.mit.inf.cpsbox.hal.Voltage)
   ))
 _sym_db.RegisterMessage(Voltage)
 
 Current = _reflection.GeneratedProtocolMessageType('Current', (_message.Message,), dict(
   DESCRIPTOR = _CURRENT,
   __module__ = 'hal_pb2'
-  # @@protoc_insertion_point(class_scope:cps.hal.Current)
+  # @@protoc_insertion_point(class_scope:hu.bme.mit.inf.cpsbox.hal.Current)
   ))
 _sym_db.RegisterMessage(Current)
 
 Illuminance = _reflection.GeneratedProtocolMessageType('Illuminance', (_message.Message,), dict(
   DESCRIPTOR = _ILLUMINANCE,
   __module__ = 'hal_pb2'
-  # @@protoc_insertion_point(class_scope:cps.hal.Illuminance)
+  # @@protoc_insertion_point(class_scope:hu.bme.mit.inf.cpsbox.hal.Illuminance)
   ))
 _sym_db.RegisterMessage(Illuminance)
 
 Angle = _reflection.GeneratedProtocolMessageType('Angle', (_message.Message,), dict(
   DESCRIPTOR = _ANGLE,
   __module__ = 'hal_pb2'
-  # @@protoc_insertion_point(class_scope:cps.hal.Angle)
+  # @@protoc_insertion_point(class_scope:hu.bme.mit.inf.cpsbox.hal.Angle)
   ))
 _sym_db.RegisterMessage(Angle)
 
 Request = _reflection.GeneratedProtocolMessageType('Request', (_message.Message,), dict(
   DESCRIPTOR = _REQUEST,
   __module__ = 'hal_pb2'
-  # @@protoc_insertion_point(class_scope:cps.hal.Request)
+  # @@protoc_insertion_point(class_scope:hu.bme.mit.inf.cpsbox.hal.Request)
   ))
 _sym_db.RegisterMessage(Request)
 
 PowerSourceDetails = _reflection.GeneratedProtocolMessageType('PowerSourceDetails', (_message.Message,), dict(
   DESCRIPTOR = _POWERSOURCEDETAILS,
   __module__ = 'hal_pb2'
-  # @@protoc_insertion_point(class_scope:cps.hal.PowerSourceDetails)
+  # @@protoc_insertion_point(class_scope:hu.bme.mit.inf.cpsbox.hal.PowerSourceDetails)
   ))
 _sym_db.RegisterMessage(PowerSourceDetails)
 
 Response = _reflection.GeneratedProtocolMessageType('Response', (_message.Message,), dict(
   DESCRIPTOR = _RESPONSE,
   __module__ = 'hal_pb2'
-  # @@protoc_insertion_point(class_scope:cps.hal.Response)
+  # @@protoc_insertion_point(class_scope:hu.bme.mit.inf.cpsbox.hal.Response)
   ))
 _sym_db.RegisterMessage(Response)
 
