@@ -19,6 +19,7 @@ class NexPlotView(NextionView):
         self.min_value = min_value
         self.max_value = max_value
         self.values = []
+        self.callback = None
         # calculate the full range of the plot and set values
         diff = max_value - min_value
         self.max_value_view.set_text(format % (diff / 5.0 * 4.0 + self.min_value))
@@ -32,13 +33,16 @@ class NexPlotView(NextionView):
         else:
             self.values.pop(0)
             self.values.append(val)
+        return val
 
-    def update_value(self, value):
-        self.push(value)
+    def set_value(self, value):
+        val = self.push(value)
         self.value_view.set_value(value)
+        self.send_command("add %d,%d,%d" % (self.comp_id, self.channel, val))
+        self.update_min_max_label()
 
     def show_values(self):
-        for val in reversed(self.values):
+        for val in self.values:
             self.send_command("add %d,%d,%d" % (self.comp_id, self.channel, val))
 
     def update_min_max_label(self):

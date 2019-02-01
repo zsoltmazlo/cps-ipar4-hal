@@ -12,3 +12,6 @@ class TextView(NextionView):
 
     def set_text(self, text):
         self.send_command(self.name + ".txt=\"" + text + "\"")
+
+    def set_value(self, value):
+        self.set_text(value)

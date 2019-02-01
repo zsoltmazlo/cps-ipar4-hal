@@ -9,6 +9,7 @@ from pprint import pprint
 from nextion.NexPlotView import NexPlotView
 from nextion.NextionView import NextionView
 from nextion.SensorView import SensorView
+from nextion.SpriteBasedAnimationView import SpriteBasedAnimationView
 from nextion.TextView import TextView
 from protogen import hal_pb2
 import socket
@@ -39,6 +40,8 @@ PORT = 9005
 # collector_positioner = CollectorPositioner(pca9865_address=0x60, tilt_servo_ch=0)
 run_display_task = True
 
+sensor_request_lock = threading.Lock()
+
 
 def calibrate_display():
     with serial.Serial('/dev/ttyUSB0', baudrate=9600, timeout=1) as dsp:
@@ -50,64 +53,134 @@ def calibrate_display():
         display.send_command('bauds=115200')
 
 
-def test_function():
-    return True, 24.556
+def update_views_task(views:[], dt=100):
+    global run_display_task
+    while run_display_task:
+        for view in views:
+            view.update()
+        time.sleep(dt/1000.0)
+
+
+def sensor_data_mock_0_180():
+    sensor_request_lock.acquire()
+    s, v = True, random.random()*180.0
+    sensor_request_lock.release()
+    return s, v
+
+
+def sensor_data_mock_m10_30():
+    sensor_request_lock.acquire()
+    s, v = True, (-10.0 + random.random() * 40.0)
+    sensor_request_lock.release()
+    return s, v
+
+
+def sensor_data_mock_0_80():
+    sensor_request_lock.acquire()
+    s, v = True, (random.random() * 80.0)
+    sensor_request_lock.release()
+    return s, v
+
+
+def sensor_data_mock_8_10():
+    sensor_request_lock.acquire()
+    s, v = True, (math.sin(time.time()/10) * 2.0 + 8.0)
+    sensor_request_lock.release()
+    return s, v
+
+
+def sensor_data_mock_900_1100():
+    sensor_request_lock.acquire()
+    s, v = True, (random.random() * 200.0 + 900.0)
+    sensor_request_lock.release()
+    return s, v
+
+
+def sensor_data_mock_05_1():
+    sensor_request_lock.acquire()
+    s, v = True, (math.sin(time.time()/30) * 0.5 + 0.5)
+    sensor_request_lock.release()
+    return s, v
+
+
+def sensor_data_mock_3_4():
+    sensor_request_lock.acquire()
+    s, v = True, (random.random() * 3.0)
+    sensor_request_lock.release()
+    return s, v
 
 
 def display_handler_task():
-    anim_index = 0
+    global run_display_task
     with serial.Serial('/dev/ttyUSB0', baudrate=115200, timeout=1) as dsp:
         # initialize display with several commands
         display = NextionView(conn=dsp)
         display.send_command('')
-        display.send_command('bkcmd=1')
-        display.send_command('page 0')
+        display.send_command('bkcmd=1') # return only with success daa
+        display.send_command('thdra=0') # disable touch show
+        display.send_command('page 0') # goto page 0
         current_page = 0
 
         time_view = TextView(conn=dsp, name="time")
+        time_view.set_callback(lambda: (True, datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')))
+
         tilt_view = SensorView(conn=dsp, name="tilt", format="%0.0f°")
-        tilt_view.set_value(90)
+        tilt_view.set_callback(sensor_data_mock_0_180)
         rotation_view = SensorView(conn=dsp, name="rotation", format="%0.0f°")
-        rotation_view.set_value(210)
-        temp_view = SensorView(conn=dsp, name="temp", format="%0.3f°C")
-        temp_view.set_callback(test_function)
-        temp_view.update_value()
-        humidity_view = SensorView(conn=dsp, name="humidity", format="%0.3f°%")
+        rotation_view.set_callback(sensor_data_mock_0_180)
+        temp_view = SensorView(conn=dsp, name="temp", format="%0.2f°C")
+        temp_view.set_callback(sensor_data_mock_m10_30)
+        humidity_view = SensorView(conn=dsp, name="humidity", format="%0.2f%%")
+        humidity_view.set_callback(sensor_data_mock_0_80)
         pressure_view = SensorView(conn=dsp, name="pressure", format="%0.2fhPa")
-        lum_view = SensorView(conn=dsp, name="lum", format="%0.2flux")
+        pressure_view.set_callback(sensor_data_mock_900_1100)
+        lum_view = SensorView(conn=dsp, name="lum", format="%0.2flx")
+        lum_view.set_callback(sensor_data_mock_0_180)
         ext_voltage_plot_view = NexPlotView(conn=dsp, prefix="ext_v", comp_id=1, channel=0,
-                                            max_value=10, min_value=0, format="%0.1fV", value_format="%0.3fV")
+                                            max_value=10, min_value=0, format="%0.1fV", value_format="%0.2fV")
+        ext_voltage_plot_view.set_callback(sensor_data_mock_8_10)
         ext_current_plot_view = NexPlotView(conn=dsp, prefix="ext_i", comp_id=1, channel=1,
-                                            max_value=1.5, min_value=0, format="%0.1fA", value_format="%0.3fA")
+                                            max_value=1.5, min_value=0, format="%0.1fA", value_format="%0.2fA")
+        ext_current_plot_view.set_callback(sensor_data_mock_05_1)
         bat_voltage_plot_view = NexPlotView(conn=dsp, prefix="bat_v", comp_id=6, channel=0,
-                                            max_value=5, min_value=3, format="%0.1fV", value_format="%0.3fV")
+                                            max_value=5, min_value=3, format="%0.1fV", value_format="%0.2fV")
+        bat_voltage_plot_view.set_callback(sensor_data_mock_3_4)
         bat_current_plot_view = NexPlotView(conn=dsp, prefix="bat_i", comp_id=6, channel=1,
-                                            max_value=1.5, min_value=0, format="%0.1fA", value_format="%0.3fA")
+                                            max_value=1.5, min_value=0, format="%0.1fA", value_format="%0.2fA")
+        bat_current_plot_view.set_callback(sensor_data_mock_05_1)
         coll_voltage_plot_view = NexPlotView(conn=dsp, prefix="coll_v", comp_id=7, channel=0,
-                                             max_value=10, min_value=0, format="%0.1fV", value_format="%0.3fV")
+                                             max_value=10, min_value=0, format="%0.1fV", value_format="%0.2fV")
+        coll_voltage_plot_view.set_callback(sensor_data_mock_8_10)
         coll_current_plot_view = NexPlotView(conn=dsp, prefix="coll_i", comp_id=7, channel=1,
-                                             max_value=1.5, min_value=0, format="%0.1fA", value_format="%0.3fA")
+                                             max_value=1.5, min_value=0, format="%0.1fA", value_format="%0.2fA")
+        coll_current_plot_view.set_callback(sensor_data_mock_05_1)
 
-        for i in range(0, 400):
-            ext_voltage_plot_view.push(math.sin(i/10.0)*2+7)
-            ext_current_plot_view.push(math.cos(i/25.0)*0.5+0.7)
-            bat_voltage_plot_view.push(random.random()*2+3)
-            bat_current_plot_view.push(random.random()+0.3)
-            coll_voltage_plot_view.push(random.random()*2+7)
-            coll_current_plot_view.push(random.random()+0.3)
+        ext_anim = SpriteBasedAnimationView(conn=dsp, name="ext_anim", sprite_indices=[14, 15, 16], disabled_sprite=22)
+        bat_anim = SpriteBasedAnimationView(conn=dsp, name="bat_anim", sprite_indices=[14, 15, 16], disabled_sprite=22)
+        coll_anim = SpriteBasedAnimationView(conn=dsp, name="coll_anim", sprite_indices=[14, 15, 16], disabled_sprite=22)
+        common_anim = SpriteBasedAnimationView(conn=dsp, name="anim", sprite_indices=[4, 5, 6], disabled_sprite=23)
+        common_anim.set_offset(6)
 
-        ext_voltage_plot_view.update_value(random.random()*2+7)
-        ext_current_plot_view.update_value(random.random()+0.3)
-        bat_voltage_plot_view.update_value(random.random()*2+3)
-        bat_current_plot_view.update_value(random.random()+0.3)
-        coll_voltage_plot_view.update_value(random.random()*2+7)
-        coll_current_plot_view.update_value(random.random()+0.3)
+        bat_anim.disable()
+        coll_anim.disable()
+        ext_anim.disable()
+        common_anim.disable()
+
+        # starting a thread with 100ms sleep time to update animations and time
+        threading.Thread(target=update_views_task,
+                         args=([ext_anim, bat_anim, coll_anim, common_anim, time_view], 100)).start()
+
+        # starting a thread with 5000ms (5s) sleep time to update sensor data
+        threading.Thread(target=update_views_task,
+                         args=([tilt_view, rotation_view, ext_voltage_plot_view, ext_current_plot_view,
+                                bat_voltage_plot_view, bat_current_plot_view,
+                                coll_voltage_plot_view, coll_current_plot_view], 500)).start()
+
+        # starting a thread with 60000ms (60s) sleep time to update sensor data
+        threading.Thread(target=update_views_task,
+                         args=([temp_view, pressure_view, humidity_view, lum_view], 1000)).start()
 
         while run_display_task:
-            # send_data_to_display(conn=dsp, command='ext_anim.pic='+str(14+anim_index))
-            # send_data_to_display(conn=dsp, command='anim.pic='+str(10+anim_index))
-            # anim_index = (anim_index+1)%3
-            time_view.set_text(datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'))
             time.sleep(0.1)
             display.send_command('sendme')
             recv = dsp.read_all()
