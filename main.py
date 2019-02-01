@@ -1,4 +1,5 @@
 import datetime
+import math
 import random
 import time
 from pprint import pprint
@@ -7,6 +8,7 @@ from pprint import pprint
 # from actuators.collectorpositioner import CollectorPositioner
 from nextion.NexPlotView import NexPlotView
 from nextion.NextionView import NextionView
+from nextion.SensorView import SensorView
 from nextion.TextView import TextView
 from protogen import hal_pb2
 import socket
@@ -37,30 +39,70 @@ PORT = 9005
 # collector_positioner = CollectorPositioner(pca9865_address=0x60, tilt_servo_ch=0)
 run_display_task = True
 
+
+def calibrate_display():
+    with serial.Serial('/dev/ttyUSB0', baudrate=9600, timeout=1) as dsp:
+        display = NextionView(conn=dsp)
+        display.send_command('')
+        display.send_command('bkcmd=1')
+        display.send_command('page 0')
+        display.send_command('touch_j')
+        display.send_command('bauds=115200')
+
+
+def test_function():
+    return True, 24.556
+
+
 def display_handler_task():
     anim_index = 0
-    with serial.Serial('/dev/ttyUSB0', timeout=1) as dsp:
+    with serial.Serial('/dev/ttyUSB0', baudrate=115200, timeout=1) as dsp:
         # initialize display with several commands
         display = NextionView(conn=dsp)
         display.send_command('')
         display.send_command('bkcmd=1')
         display.send_command('page 0')
         current_page = 0
+
         time_view = TextView(conn=dsp, name="time")
-        tilt_view = TextView(conn=dsp, name="tilt")
-        rotation_view = TextView(conn=dsp, name="rotation")
-        temp_view = TextView(conn=dsp, name="temp")
-        humidity_view = TextView(conn=dsp, name="humidity")
-        pressure_view = TextView(conn=dsp, name="pressure")
-        lum_view = TextView(conn=dsp, name="lum")
-        ext_voltage_plot_view = NexPlotView(conn=dsp, prefix="ext_v", comp_id=1, channel=0, max_value=10, min_value=0, format="%0.1fV")
-        ext_current_plot_view = NexPlotView(conn=dsp, prefix="ext_i", comp_id=1, channel=1, max_value=1.5, min_value=0, format="%0.1fA")
+        tilt_view = SensorView(conn=dsp, name="tilt", format="%0.0f°")
+        tilt_view.set_value(90)
+        rotation_view = SensorView(conn=dsp, name="rotation", format="%0.0f°")
+        rotation_view.set_value(210)
+        temp_view = SensorView(conn=dsp, name="temp", format="%0.3f°C")
+        temp_view.set_callback(test_function)
+        temp_view.update_value()
+        humidity_view = SensorView(conn=dsp, name="humidity", format="%0.3f°%")
+        pressure_view = SensorView(conn=dsp, name="pressure", format="%0.2fhPa")
+        lum_view = SensorView(conn=dsp, name="lum", format="%0.2flux")
+        ext_voltage_plot_view = NexPlotView(conn=dsp, prefix="ext_v", comp_id=1, channel=0,
+                                            max_value=10, min_value=0, format="%0.1fV", value_format="%0.3fV")
+        ext_current_plot_view = NexPlotView(conn=dsp, prefix="ext_i", comp_id=1, channel=1,
+                                            max_value=1.5, min_value=0, format="%0.1fA", value_format="%0.3fA")
+        bat_voltage_plot_view = NexPlotView(conn=dsp, prefix="bat_v", comp_id=6, channel=0,
+                                            max_value=5, min_value=3, format="%0.1fV", value_format="%0.3fV")
+        bat_current_plot_view = NexPlotView(conn=dsp, prefix="bat_i", comp_id=6, channel=1,
+                                            max_value=1.5, min_value=0, format="%0.1fA", value_format="%0.3fA")
+        coll_voltage_plot_view = NexPlotView(conn=dsp, prefix="coll_v", comp_id=7, channel=0,
+                                             max_value=10, min_value=0, format="%0.1fV", value_format="%0.3fV")
+        coll_current_plot_view = NexPlotView(conn=dsp, prefix="coll_i", comp_id=7, channel=1,
+                                             max_value=1.5, min_value=0, format="%0.1fA", value_format="%0.3fA")
 
-        for i in range(0, 200):
-            ext_voltage_plot_view.push(random.random()*2+7)
-            ext_current_plot_view.push(random.random()+0.3)
+        for i in range(0, 400):
+            ext_voltage_plot_view.push(math.sin(i/10.0)*2+7)
+            ext_current_plot_view.push(math.cos(i/25.0)*0.5+0.7)
+            bat_voltage_plot_view.push(random.random()*2+3)
+            bat_current_plot_view.push(random.random()+0.3)
+            coll_voltage_plot_view.push(random.random()*2+7)
+            coll_current_plot_view.push(random.random()+0.3)
 
-        # send_data_to_display(conn=dsp, command='ext_v_top.txt="1.2V"')
+        ext_voltage_plot_view.update_value(random.random()*2+7)
+        ext_current_plot_view.update_value(random.random()+0.3)
+        bat_voltage_plot_view.update_value(random.random()*2+3)
+        bat_current_plot_view.update_value(random.random()+0.3)
+        coll_voltage_plot_view.update_value(random.random()*2+7)
+        coll_current_plot_view.update_value(random.random()+0.3)
+
         while run_display_task:
             # send_data_to_display(conn=dsp, command='ext_anim.pic='+str(14+anim_index))
             # send_data_to_display(conn=dsp, command='anim.pic='+str(10+anim_index))
@@ -79,6 +121,16 @@ def display_handler_task():
                         ext_current_plot_view.show_values()
                         ext_voltage_plot_view.update_min_max_label()
                         ext_current_plot_view.update_min_max_label()
+                    elif page_id == 2:
+                        coll_voltage_plot_view.show_values()
+                        coll_current_plot_view.show_values()
+                        coll_voltage_plot_view.update_min_max_label()
+                        coll_current_plot_view.update_min_max_label()
+                    elif page_id == 3:
+                        bat_voltage_plot_view.show_values()
+                        bat_current_plot_view.show_values()
+                        bat_voltage_plot_view.update_min_max_label()
+                        bat_current_plot_view.update_min_max_label()
     pass
 
 

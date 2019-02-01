@@ -1,10 +1,12 @@
+import string
+
 import serial
 from nextion.NextionView import NextionView
 
 
 class TextView(NextionView):
 
-    def __init__(self, conn: serial.Serial, name):
+    def __init__(self, conn: serial.Serial, name: string):
         NextionView.__init__(self, conn=conn)
         self.name = name
 
