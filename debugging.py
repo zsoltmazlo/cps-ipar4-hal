@@ -36,21 +36,21 @@ def socket_test(host, port, tilt_angle=None, rotation_angle=None, message=None, 
 
         print("Request:")
         pprint(request)
-        size = request.ByteSize()
-        sck.send(_VarintBytes(size))
+        # size = request.ByteSize()
+        # sck.send(_VarintBytes(size))
         sck.sendall(request.SerializeToString())
 
-        n = 0
+        # n = 0
         response_raw = sck.recv(200)
-        while n < len(response_raw):
-            msg_len, new_pos = _DecodeVarint32(response_raw, n)
-            n = new_pos
-            response_raw = response_raw[n:n + msg_len]
-            n += msg_len
-            response = hal_pb2.Response()
-            response.ParseFromString(response_raw)
-            print("Response:")
-            pprint(response)
+        # while n < len(response_raw):
+        #     msg_len, new_pos = _DecodeVarint32(response_raw, n)
+        #     n = new_pos
+        #     response_raw = response_raw[n:n + msg_len]
+        #     n += msg_len
+        response = hal_pb2.Response()
+        response.ParseFromString(response_raw)
+        print("Response:")
+        pprint(response)
     pass
 
 

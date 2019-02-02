@@ -286,7 +286,7 @@ def main():
         # if connection is interrupted, then we listen again
         try:
             while True:
-                # display.change_connected_status(False)
+                display.change_connected_status(False)
                 conn = None
                 try:
                     conn, address = sck.accept()
