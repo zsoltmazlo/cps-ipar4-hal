@@ -30,7 +30,7 @@ class ServoController:
             time.sleep(0.05)
 
         # finishing setup with the actual value
-        self.expander.set_pwm(0, 0, self.pulse)
+        self.expander.set_pwm(self.channel, 0, self.pulse)
         return True, self.angle
 
     def get_angle(self):
@@ -49,9 +49,11 @@ class CollectorPositioner:
                     expander=self.expander,
                     channel=tilt_servo_ch,
                     min_angle=0,
-                    max_angle=75,
-                    min_pulse=170,
-                    max_pulse=390
+                    max_angle=90,
+                    # min_pulse=170,
+                    # max_pulse=390
+                    min_pulse=140,
+                    max_pulse=340
                 )
                 self.tilt_servo.set_angle(0)
             else:
@@ -60,11 +62,11 @@ class CollectorPositioner:
             if rotation_servo_ch is not None:
                 self.rotation_servo = ServoController(
                     expander=self.expander,
-                    channel=tilt_servo_ch,
+                    channel=rotation_servo_ch,
                     min_angle=0,
-                    max_angle=75,
-                    min_pulse=170,
-                    max_pulse=390
+                    max_angle=180,
+                    min_pulse=180,
+                    max_pulse=660
                 )
                 self.rotation_servo.set_angle(0)
             else:
@@ -85,7 +87,7 @@ class CollectorPositioner:
         if self.tilt_servo is None:
             return False, 0
         else:
-            return self.tilt_servo.get_angle()
+            return True, self.tilt_servo.get_angle()
 
     def set_rotation_angle(self, angle):
         if self.rotation_servo is None:
@@ -97,7 +99,7 @@ class CollectorPositioner:
         if self.rotation_servo is None:
             return False, 0
         else:
-            return self.rotation_servo.get_angle()
+            return True, self.rotation_servo.get_angle()
 
     def finish(self):
         if self.tilt_servo is not None:

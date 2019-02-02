@@ -15,7 +15,7 @@ class SpriteBasedAnimationView(NextionView):
         self.name = name
         self.sprite_index = 0
         self.sprite_offset = 0
-        self.set_sprite(self.sprite_index)
+        self.set_sprite(self.sprite_indices[self.sprite_index])
         self.set_callback(lambda: (True, 0))
 
     def set_sprite(self, index):
@@ -34,7 +34,8 @@ class SpriteBasedAnimationView(NextionView):
 
     def enable(self):
         self.enabled = True
-        self.set_sprite(self.sprite_index)
+        self.sprite_index = 0
+        self.set_sprite(self.sprite_indices[self.sprite_index])
 
     def set_offset(self, offset):
         self.sprite_offset = offset

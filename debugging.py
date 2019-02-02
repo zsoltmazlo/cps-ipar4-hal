@@ -2,6 +2,9 @@ import socket
 import time
 from pprint import pprint
 
+from google.protobuf.internal.encoder import _VarintBytes
+from google.protobuf.internal.decoder import _DecodeVarint32
+
 from protogen import hal_pb2
 
 
@@ -10,34 +13,44 @@ def socket_test(host, port, tilt_angle=None, rotation_angle=None, message=None, 
         sck.connect((host, port))
         print("Connected to socket, sending test data")
 
-        tmp = hal_pb2.Request()
-        tmp.data = hal_pb2.Request.COLLECTOR_PS_STATE*2-1
+        request = hal_pb2.Request()
+        request.data = hal_pb2.Request.COLLECTOR_PS_STATE*2-1
 
         if tilt_angle is not None:
-            tmp.control |= hal_pb2.Request.SET_COLLECTOR_TILT_ANGLE
-            tmp.tilt_angle.value = tilt_angle
-            tmp.tilt_angle.unit = hal_pb2.Angle.DEGREE
+            request.control |= hal_pb2.Request.SET_COLLECTOR_TILT_ANGLE
+            request.tilt_angle.value = tilt_angle
+            request.tilt_angle.unit = hal_pb2.Angle.DEGREE
 
         if rotation_angle is not None:
-            tmp.control |= hal_pb2.Request.SET_COLLECTOR_ROTATION_ANGLE
-            tmp.rotation_angle.value = rotation_angle
-            tmp.rotation_angle.unit = hal_pb2.Angle.DEGREE
+            request.control |= hal_pb2.Request.SET_COLLECTOR_ROTATION_ANGLE
+            request.rotation_angle.value = rotation_angle
+            request.rotation_angle.unit = hal_pb2.Angle.DEGREE
 
         if message is not None:
-            tmp.control |= hal_pb2.Request.SHOW_MESSAGE
-            tmp.message = message
+            request.control |= hal_pb2.Request.SHOW_MESSAGE
+            request.message = message
 
         if source is not None:
-            tmp.control |= hal_pb2.Request.SET_POWER_SOURCE
-            tmp.source = source
+            request.control |= hal_pb2.Request.SET_POWER_SOURCE
+            request.source = source
 
-        sck.sendall(tmp.SerializeToString())
-        data = sck.recv(200)
-        resp = hal_pb2.Response()
-        resp.ParseFromString(data)
-        print("Received response:")
-        pprint(resp)
-        time.sleep(5)
+        print("Request:")
+        pprint(request)
+        size = request.ByteSize()
+        sck.send(_VarintBytes(size))
+        sck.sendall(request.SerializeToString())
+
+        n = 0
+        response_raw = sck.recv(200)
+        while n < len(response_raw):
+            msg_len, new_pos = _DecodeVarint32(response_raw, n)
+            n = new_pos
+            response_raw = response_raw[n:n + msg_len]
+            n += msg_len
+            response = hal_pb2.Response()
+            response.ParseFromString(response_raw)
+            print("Response:")
+            pprint(response)
     pass
 
 
