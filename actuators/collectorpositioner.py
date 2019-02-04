@@ -104,5 +104,7 @@ class CollectorPositioner:
     def finish(self):
         if self.tilt_servo is not None:
             self.tilt_servo.set_angle(0)
+        if self.rotation_servo is not None:
+            self.rotation_servo.set_angle(0)
 
 

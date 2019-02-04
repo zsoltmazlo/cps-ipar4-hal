@@ -2,9 +2,11 @@ import socket
 import time
 from pprint import pprint
 
+import serial
 from google.protobuf.internal.encoder import _VarintBytes
 from google.protobuf.internal.decoder import _DecodeVarint32
 
+from nextion.NextionView import NextionView
 from protogen import hal_pb2
 
 
@@ -93,5 +95,17 @@ def display_debug_data(display, port=9001, light_sensor=None, external_source=No
     display.draw_text(80, 48, format(env_sensor.read_pressure() / 100, '.1f') + "hPa")
 
 
+def calibrate_display(baudrate=9600):
+    '''
+    This function helps to setup any nextion device to work with this solution. Running once for each display is enough
 
-
+    Does two things: first the touchscreen is calibrated, then setting the baud rate to 115200bps
+    :return: nothing
+    '''
+    with serial.Serial('/dev/ttyUSB0', baudrate=baudrate, timeout=1) as dsp:
+        display = NextionView(conn=dsp)
+        display.send_command('')
+        display.send_command('bkcmd=1')
+        display.send_command('page 0')
+        display.send_command('touch_j')
+        display.send_command('bauds=115200')
