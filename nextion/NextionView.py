@@ -35,4 +35,6 @@ class NextionView:
         self.conn.write(b'\xFF')
         self.conn.write(b'\xFF')
         self.conn.write(b'\xFF')
+        self.conn.flush()
         NextionView.lock.release()
+        # print(cmd)

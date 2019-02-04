@@ -13,7 +13,7 @@ from sensors.bh1750 import BH1750
 
 HOST = '0.0.0.0' # on all interface
 # HOST = '127.0.0.1' # only for localhost
-PORT = 9004
+PORT = 9005
 
 # actuators
 display = SSD1306()

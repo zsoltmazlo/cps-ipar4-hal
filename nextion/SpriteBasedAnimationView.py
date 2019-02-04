@@ -29,12 +29,14 @@ class SpriteBasedAnimationView(NextionView):
 
     def disable(self):
         self.enabled = False
-        self.set_sprite(self.disabled_sprite)
+        self.send_command("vis %s,0" % self.name)
+        # self.set_sprite(self.disabled_sprite)
         self.sprite_index = 0
 
     def enable(self):
         self.enabled = True
         self.sprite_index = 0
+        self.send_command("vis %s,1" % self.name)
         self.set_sprite(self.sprite_indices[self.sprite_index])
 
     def set_offset(self, offset):

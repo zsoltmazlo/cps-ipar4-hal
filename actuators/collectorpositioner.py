@@ -5,7 +5,7 @@ from Adafruit_PCA9685 import PCA9685
 class ServoController:
 
     def __init__(self, expander, channel, min_angle, max_angle, min_pulse, max_pulse):
-        self.DIFF = 5
+        self.DIFF = 10
         self.max_pulse = max_pulse
         self.min_pulse = min_pulse
         self.max_angle = max_angle

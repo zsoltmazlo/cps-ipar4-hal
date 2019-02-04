@@ -21,7 +21,11 @@ def update_views_task(task_name: string, views:[], dt=100):
     while task_manager.is_task_running(task_name):
         for view in views:
             view.update()
-        time.sleep(dt/1000.0)
+        i = 100
+        while i <= dt and task_manager.is_task_running(task_name):
+            time.sleep(i/1000.0)
+            i += 100
+
 
 
 def sensor_data_mock_0_180():
@@ -180,6 +184,7 @@ def display_handler_task():
         threads.append("slow sensor data update task")
 
         prev_pwr_source = None
+        display.send_command('dim=100')
 
         while task_manager.is_task_running("display handler"):
             sensor_request_lock.acquire()
@@ -235,6 +240,7 @@ def display_handler_task():
         for th in threads:
             task_manager.finish_task(th)
 
+        display.send_command('dim=0')
         display.send_command('page 0')
         coll_anim.disable()
         bat_anim.disable()
