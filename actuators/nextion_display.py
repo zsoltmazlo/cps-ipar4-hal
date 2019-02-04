@@ -2,6 +2,7 @@ import datetime
 import functools
 import math
 import random
+import string
 import threading
 import time
 
@@ -13,15 +14,11 @@ from nextion.SensorView import SensorView
 from nextion.SpriteBasedAnimationView import SpriteBasedAnimationView
 from nextion.TextView import TextView
 from protogen import hal_pb2
-from config import pwr_selector, collector_positioner, light_sensor, sensor_request_lock
+from config import pwr_selector, collector_positioner, light_sensor, sensor_request_lock, task_manager
 
 
-run_display_task = False
-
-
-def update_views_task(views:[], dt=100):
-    global run_display_task
-    while run_display_task:
+def update_views_task(task_name: string, views:[], dt=100):
+    while task_manager.is_task_running(task_name):
         for view in views:
             view.update()
         time.sleep(dt/1000.0)
@@ -83,9 +80,7 @@ def read_sensor_value(fn):
     return s, v
 
 
-def display_handler_task(run_task=False):
-    global run_display_task
-    run_display_task = run_task
+def display_handler_task():
     with serial.Serial('/dev/ttyUSB0', baudrate=115200, timeout=1) as dsp:
         # initialize display with several commands
         display = NextionView(conn=dsp)
@@ -156,44 +151,59 @@ def display_handler_task(run_task=False):
         ext_anim.disable()
 
         # starting a thread with 100ms sleep time to update animations and time
-        threading.Thread(target=update_views_task,
-                         args=([ext_anim, bat_anim, coll_anim, common_anim, time_view], 100)).start()
+        threads = []
+        t1 = threading.Thread(target=update_views_task,
+                         args=("animation update task", [ext_anim, bat_anim, coll_anim, common_anim, time_view], 100))
+        task_manager.run_task(task_name="animation update task", task=t1)
+        threads.append("animation update task")
 
-        # starting a thread with 5000ms (5s) sleep time to update sensor data
-        threading.Thread(target=update_views_task,
-                         args=([tilt_view, rotation_view, ext_voltage_plot_view, ext_current_plot_view,
+        # starting a thread with 500ms (0.5s) sleep time to update sensor data
+        t2 = threading.Thread(target=update_views_task,
+                         args=("quick sensor data update task", [tilt_view, rotation_view], 500))
+        task_manager.run_task(task_name="quick sensor data update task", task=t2)
+        threads.append("quick sensor data update task")
+
+        # starting a thread with 200000ms (200s) sleep time to update sensor data
+        t3 = threading.Thread(target=update_views_task,
+                         args=("plot update task",
+                               [ext_voltage_plot_view, ext_current_plot_view,
                                 bat_voltage_plot_view, bat_current_plot_view,
-                                coll_voltage_plot_view, coll_current_plot_view], 500)).start()
+                                coll_voltage_plot_view, coll_current_plot_view], 200000))
+        task_manager.run_task(task_name="plot update task", task=t3)
+        threads.append("plot update task")
 
         # starting a thread with 60000ms (60s) sleep time to update sensor data
-        threading.Thread(target=update_views_task,
-                         args=([temp_view, pressure_view, humidity_view, lum_view], 1000)).start()
+        t4 = threading.Thread(target=update_views_task,
+                         args=("slow sensor data update task",
+                               [temp_view, pressure_view, humidity_view, lum_view], 1000))
+        task_manager.run_task(task_name="slow sensor data update task", task=t4)
+        threads.append("slow sensor data update task")
 
         prev_pwr_source = None
 
-        while run_display_task:
+        while task_manager.is_task_running("display handler"):
             sensor_request_lock.acquire()
             current_pwr_source = pwr_selector.get_power_source()
             sensor_request_lock.release()
             if prev_pwr_source is None or current_pwr_source != prev_pwr_source:
                 prev_pwr_source = current_pwr_source
                 if current_pwr_source == hal_pb2.EXTERNAL:
+                    common_anim.set_offset(6)
                     coll_anim.disable()
                     bat_anim.disable()
                     ext_anim.enable()
-                    common_anim.set_offset(6)
                     common_anim.enable()
                 elif current_pwr_source == hal_pb2.COLLECTOR:
+                    common_anim.set_offset(3)
                     coll_anim.enable()
                     bat_anim.disable()
                     ext_anim.disable()
-                    common_anim.set_offset(3)
-                    common_anim.disable()
+                    common_anim.enable()
                 elif current_pwr_source == hal_pb2.BATTERY:
+                    common_anim.set_offset(0)
                     coll_anim.disable()
                     bat_anim.enable()
                     ext_anim.disable()
-                    common_anim.set_offset(0)
                     common_anim.enable()
 
             time.sleep(0.1)
@@ -219,4 +229,17 @@ def display_handler_task(run_task=False):
                         bat_current_plot_view.show_values()
                         bat_voltage_plot_view.update_min_max_label()
                         bat_current_plot_view.update_min_max_label()
+
+        print("Closing display")
+
+        for th in threads:
+            task_manager.finish_task(th)
+
+        display.send_command('page 0')
+        coll_anim.disable()
+        bat_anim.disable()
+        ext_anim.disable()
+        common_anim.disable()
+
+        # serial connection ends here
     pass

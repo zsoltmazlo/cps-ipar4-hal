@@ -1,5 +1,6 @@
 # from pijuice import PiJuice
 import threading
+from task_manager import TaskManager
 
 from actuators.collectorpositioner import CollectorPositioner
 from actuators.power_source_selector import PowerSourceSelector
@@ -12,7 +13,7 @@ from sensors.bh1750 import BH1750
 
 HOST = '0.0.0.0' # on all interface
 # HOST = '127.0.0.1' # only for localhost
-PORT = 9002
+PORT = 9004
 
 # actuators
 display = SSD1306()
@@ -29,3 +30,4 @@ light_sensor = BH1750(address=0x23)
 
 
 sensor_request_lock = threading.Lock()
+task_manager = TaskManager()

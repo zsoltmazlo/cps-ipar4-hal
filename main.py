@@ -1,19 +1,15 @@
 from pprint import pprint
 
 from actuators.nextion_display import display_handler_task
-from config import HOST, PORT, display, pwr_selector, collector_positioner, light_sensor
+from config import HOST, PORT, display, pwr_selector, collector_positioner, task_manager
 from process_request import process_request
 from protogen import hal_pb2
 import socket
 import threading
 
-run_display_task = True
-
-
 
 def main():
-    global run_display_task
-    threading.Thread(target=display_handler_task, args=(run_display_task, )).start()
+    task_manager.run_task(task_name="display handler", task=threading.Thread(target=display_handler_task))
     display.clear()
     pwr_selector.select_external_source()
     if collector_positioner is not None:
@@ -25,8 +21,8 @@ def main():
         display.show_connection_details(PORT)
         display.show_message_box()
         display.change_connected_status(False)
-        print("Port:", PORT)
-        print("Waiting for connection...")
+        print("[MAIN] Port:", PORT)
+        print("[MAIN] Waiting for connection...")
         # the maximum number of queued connections: 1
         sck.listen(1)
 
@@ -38,10 +34,10 @@ def main():
                 try:
                     conn, address = sck.accept()
                     display.change_connected_status(True)
-                    print("Accepted connection from:", address)
+                    print("[MAIN] Accepted connection from:", address)
                     while True:
                         request_raw = conn.recv(200)
-                        print("Packet received")
+                        print("[MAIN] Packet received")
                         if not request_raw:
                             break
 
@@ -63,7 +59,7 @@ def main():
                                 # size = response.ByteSize()
                                 # conn.send(_VarintBytes(size))
                                 conn.sendall(response.SerializeToString())
-                            print("End of packet")
+                            print("[MAIN] End of packet")
                         finally:
                             conn.close()
                             conn = None
@@ -74,7 +70,7 @@ def main():
                     raise KeyboardInterrupt
 
                 except:
-                    print("Error during establishing connection")
+                    print("[MAIN] Error during establishing connection")
                     pass
 
                 finally:
@@ -82,12 +78,12 @@ def main():
                         conn.close()
 
         except KeyboardInterrupt:
-            print("Finishing listening on port ", PORT)
+            print("[MAIN] Finishing listening on port ", PORT)
             pass
         finally:
             sck.close()
 
-    run_display_task = False
+    task_manager.finish_task("display handler")
     display.clear()
     pwr_selector.select_battery_source()
     if collector_positioner is not None:
