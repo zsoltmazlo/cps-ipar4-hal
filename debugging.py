@@ -16,8 +16,8 @@ def socket_test(host, port, tilt_angle=None, rotation_angle=None, message=None, 
         print("Connected to socket, sending test data")
 
         request = hal_pb2.Request()
-        # request.data = hal_pb2.Request.COLLECTOR_PS_STATE*2-1
-        request.data = hal_pb2.Request.INTERNAL_TEMPERATURE | hal_pb2.Request.INTERNAL_HUMIDITY | hal_pb2.Request.BATTERY_VOLTAGE
+        request.data = hal_pb2.Request.COLLECTOR_PS_STATE*2-1
+        # request.data = hal_pb2.Request.INTERNAL_TEMPERATURE | hal_pb2.Request.INTERNAL_HUMIDITY | hal_pb2.Request.BATTERY_VOLTAGE
 
         if tilt_angle is not None:
             request.control |= hal_pb2.Request.SET_COLLECTOR_TILT_ANGLE
@@ -54,6 +54,36 @@ def socket_test(host, port, tilt_angle=None, rotation_angle=None, message=None, 
         response.ParseFromString(response_raw)
         print("Response:")
         pprint(response)
+
+        print("Errors: ")
+        if response.status & hal_pb2.Response.OK > 0:
+            print("OK")
+        if response.status & hal_pb2.Response.UNRECOGNISED_REQUEST > 0:
+            print("UNRECOGNISED_REQUEST")
+        if response.status & hal_pb2.Response.INT_TEMPERATURE_ERROR > 0:
+            print("INT_TEMPERATURE_ERROR")
+        if response.status & hal_pb2.Response.HUMIDITIY_ERROR > 0:
+            print("HUMIDITIY_ERROR")
+        if response.status & hal_pb2.Response.PRESSURE_ERROR > 0:
+            print("PRESSURE_ERROR")
+        if response.status & hal_pb2.Response.ILLUMINANCE_ERROR > 0:
+            print("ILLUMINANCE_ERROR")
+        if response.status & hal_pb2.Response.EXT_TEMPERATURE_ERROR > 0:
+            print("EXT_TEMPERATURE_ERROR")
+        if response.status & hal_pb2.Response.COLLECTOR_TILT_ERROR > 0:
+            print("COLLECTOR_TILT_ERROR")
+        if response.status & hal_pb2.Response.COLLECTOR_ROTATION_ERROR > 0:
+            print("COLLECTOR_ROTATION_ERROR")
+        if response.status & hal_pb2.Response.BATTERY_ERROR > 0:
+            print("BATTERY_ERROR")
+        if response.status & hal_pb2.Response.EXTERNAL_ERROR > 0:
+            print("EXTERNAL_ERROR")
+        if response.status & hal_pb2.Response.COLLECTOR_ERROR > 0:
+            print("COLLECTOR_ERROR")
+        if response.status & hal_pb2.Response.POWER_SOURCE_ERROR > 0:
+            print("POWER_SOURCE_ERROR")
+        if response.status & hal_pb2.Response.SHOW_MESSAGE_ERROR > 0:
+            print("SHOW_MESSAGE_ERROR")
     pass
 
 
