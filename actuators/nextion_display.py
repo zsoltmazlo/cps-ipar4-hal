@@ -14,7 +14,8 @@ from nextion.SensorView import SensorView
 from nextion.SpriteBasedAnimationView import SpriteBasedAnimationView
 from nextion.TextView import TextView
 from protogen import hal_pb2
-from config import pwr_selector, collector_positioner, light_sensor, sensor_request_lock, task_manager
+from config import pwr_selector, collector_positioner, light_sensor, sensor_request_lock, task_manager, env_sensor, \
+    external_source, panel_source
 
 
 def update_views_task(task_name: string, views:[], dt=100):
@@ -117,33 +118,44 @@ def display_handler_task():
         rotation_view.set_callback(functools.partial(read_sensor_value, collector_positioner.get_rotation_angle))
 
         temp_view = SensorView(conn=dsp, name="temp", format="%0.2f°C")
-        temp_view.set_callback(sensor_data_mock_m10_30)
+        temp_view.set_callback(functools.partial(read_sensor_value, env_sensor.get_temperature))
         humidity_view = SensorView(conn=dsp, name="humidity", format="%0.2f%%")
-        humidity_view.set_callback(sensor_data_mock_0_80)
+        humidity_view.set_callback(functools.partial(read_sensor_value, env_sensor.get_humidity))
         pressure_view = SensorView(conn=dsp, name="pressure", format="%0.2fhPa")
-        pressure_view.set_callback(sensor_data_mock_900_1100)
+        pressure_view.set_callback(functools.partial(read_sensor_value, env_sensor.get_pressure))
 
         lum_view = SensorView(conn=dsp, name="lum", format="%0.2flx")
         lum_view.set_callback(functools.partial(read_sensor_value, light_sensor.read_intensity))
 
         ext_voltage_plot_view = NexPlotView(conn=dsp, prefix="ext_v", comp_id=1, channel=0,
                                             max_value=10, min_value=0, format="%0.1fV", value_format="%0.2fV")
-        ext_voltage_plot_view.set_callback(sensor_data_mock_8_10)
+        ext_voltage_plot_view.set_callback(functools.partial(read_sensor_value, external_source.voltage))
+        ext_voltage_view = SensorView(conn=dsp, name="ext_v", format="%.0fmV")
+        ext_voltage_view.set_callback(functools.partial(read_sensor_value, external_source.bus_voltage))
+
         ext_current_plot_view = NexPlotView(conn=dsp, prefix="ext_i", comp_id=1, channel=1,
                                             max_value=1.5, min_value=0, format="%0.1fA", value_format="%0.2fA")
-        ext_current_plot_view.set_callback(sensor_data_mock_05_1)
+        ext_current_plot_view.set_callback(functools.partial(read_sensor_value, external_source.current))
+        ext_current_view = SensorView(conn=dsp, name="ext_i", format="%.0fmA")
+        ext_current_view.set_callback(functools.partial(read_sensor_value, external_source.current))
+
         bat_voltage_plot_view = NexPlotView(conn=dsp, prefix="bat_v", comp_id=6, channel=0,
                                             max_value=5, min_value=3, format="%0.1fV", value_format="%0.2fV")
-        bat_voltage_plot_view.set_callback(sensor_data_mock_3_4)
+        # bat_voltage_plot_view.set_callback(sensor_data_mock_3_4)
         bat_current_plot_view = NexPlotView(conn=dsp, prefix="bat_i", comp_id=6, channel=1,
                                             max_value=1.5, min_value=0, format="%0.1fA", value_format="%0.2fA")
-        bat_current_plot_view.set_callback(sensor_data_mock_05_1)
+        # bat_current_plot_view.set_callback(sensor_data_mock_05_1)
         coll_voltage_plot_view = NexPlotView(conn=dsp, prefix="coll_v", comp_id=7, channel=0,
                                              max_value=10, min_value=0, format="%0.1fV", value_format="%0.2fV")
-        coll_voltage_plot_view.set_callback(sensor_data_mock_8_10)
+        coll_voltage_plot_view.set_callback(functools.partial(read_sensor_value, panel_source.voltage))
+        coll_voltage_view = SensorView(conn=dsp, name="coll_v", format="%.0fmV")
+        coll_voltage_view.set_callback(functools.partial(read_sensor_value, panel_source.bus_voltage))
+
         coll_current_plot_view = NexPlotView(conn=dsp, prefix="coll_i", comp_id=7, channel=1,
                                              max_value=1.5, min_value=0, format="%0.1fA", value_format="%0.2fA")
-        coll_current_plot_view.set_callback(sensor_data_mock_05_1)
+        coll_current_plot_view.set_callback(functools.partial(read_sensor_value, panel_source.current))
+        coll_current_view = SensorView(conn=dsp, name="coll_i", format="%.0fmA")
+        coll_current_view.set_callback(functools.partial(read_sensor_value, panel_source.current))
 
         # power source input animatiom
         ext_anim = SpriteBasedAnimationView(conn=dsp, name="ext_anim", sprite_indices=[14, 15, 16], disabled_sprite=13)
@@ -163,7 +175,10 @@ def display_handler_task():
 
         # starting a thread with 500ms (0.5s) sleep time to update sensor data
         t2 = threading.Thread(target=update_views_task,
-                         args=("quick sensor data update task", [tilt_view, rotation_view], 500))
+                         args=("quick sensor data update task",
+                               [tilt_view, rotation_view,
+                                ext_voltage_view, ext_current_view,
+                                coll_voltage_view, coll_current_view], 500))
         task_manager.run_task(task_name="quick sensor data update task", task=t2)
         threads.append("quick sensor data update task")
 

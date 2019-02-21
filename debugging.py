@@ -1,10 +1,7 @@
 import socket
-import time
 from pprint import pprint
 
 import serial
-from google.protobuf.internal.encoder import _VarintBytes
-from google.protobuf.internal.decoder import _DecodeVarint32
 
 from nextion.NextionView import NextionView
 from protogen import hal_pb2

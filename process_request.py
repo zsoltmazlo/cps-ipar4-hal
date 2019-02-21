@@ -29,7 +29,7 @@ def process_request(request: hal_pb2.Request):
                 response.humidity.value = hum
                 response.humidity.unit = hal_pb2.Humidity.RELATIVE_HUMIDITY
             else:
-                response.status |= hal_pb2.Response.INT_TEMPERATURE_ERROR
+                response.status |= hal_pb2.Response.HUMIDITIY_ERROR
 
         # read pressure data from sensor when all data or that specific data requested
         if (request.data & hal_pb2.Request.INTERNAL_PRESSURE) > 0:

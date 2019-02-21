@@ -1,5 +1,6 @@
 import time
 from Adafruit_PCA9685 import PCA9685
+from gpiozero import LED
 
 
 class ServoController:
@@ -39,8 +40,13 @@ class ServoController:
 
 class CollectorPositioner:
 
-    def __init__(self, pca9865_address=0x41, tilt_servo_ch=None, rotation_servo_ch=None):
-        # TODO add output enable functionality
+    def __init__(self, pca9865_address=0x40, en_pin=None, tilt_servo_ch=None, rotation_servo_ch=None):
+        if en_pin is not None:
+            self.en_led = LED(en_pin)
+            self.en_led.off()
+        else:
+            self.en_led = None
+
         try:
             self.expander = PCA9685(address=pca9865_address)
             self.expander.set_pwm_freq(60)
@@ -50,8 +56,6 @@ class CollectorPositioner:
                     channel=tilt_servo_ch,
                     min_angle=0,
                     max_angle=90,
-                    # min_pulse=170,
-                    # max_pulse=390
                     min_pulse=140,
                     max_pulse=340
                 )
@@ -106,5 +110,6 @@ class CollectorPositioner:
             self.tilt_servo.set_angle(0)
         if self.rotation_servo is not None:
             self.rotation_servo.set_angle(0)
-
+        if self.en_led is not None:
+            self.en_led.on()
 

@@ -35,7 +35,7 @@ def main():
                     conn, address = sck.accept()
                     display.change_connected_status(True)
                     print("[MAIN] Accepted connection from:", address)
-                    while True:
+                    while conn is not None:
                         request_raw = conn.recv(200)
                         print("[MAIN] Packet received")
                         if not request_raw:
@@ -63,7 +63,6 @@ def main():
                         finally:
                             conn.close()
                             conn = None
-                            break
 
                 # keyboard interrupt must be passed to able to finish listening
                 except KeyboardInterrupt:
