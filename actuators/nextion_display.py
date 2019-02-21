@@ -28,56 +28,6 @@ def update_views_task(task_name: string, views:[], dt=100):
             i += 100
 
 
-
-def sensor_data_mock_0_180():
-    sensor_request_lock.acquire()
-    s, v = True, random.random()*180.0
-    sensor_request_lock.release()
-    return s, v
-
-
-def sensor_data_mock_m10_30():
-    sensor_request_lock.acquire()
-    s, v = True, (-10.0 + random.random() * 40.0)
-    sensor_request_lock.release()
-    return s, v
-
-
-def sensor_data_mock_0_80():
-    sensor_request_lock.acquire()
-    s, v = True, (random.random() * 80.0)
-    sensor_request_lock.release()
-    return s, v
-
-
-def sensor_data_mock_8_10():
-    sensor_request_lock.acquire()
-    s, v = True, (math.sin(time.time()/10) * 2.0 + 8.0)
-    sensor_request_lock.release()
-    return s, v
-
-
-def sensor_data_mock_900_1100():
-    sensor_request_lock.acquire()
-    s, v = True, (random.random() * 200.0 + 900.0)
-    sensor_request_lock.release()
-    return s, v
-
-
-def sensor_data_mock_05_1():
-    sensor_request_lock.acquire()
-    s, v = True, (math.sin(time.time()/30) * 0.5 + 0.5)
-    sensor_request_lock.release()
-    return s, v
-
-
-def sensor_data_mock_3_4():
-    sensor_request_lock.acquire()
-    s, v = True, (random.random() * 3.0)
-    sensor_request_lock.release()
-    return s, v
-
-
 def read_sensor_value(fn):
     sensor_request_lock.acquire()
     s, v = fn()
@@ -141,10 +91,8 @@ def display_handler_task():
 
         bat_voltage_plot_view = NexPlotView(conn=dsp, prefix="bat_v", comp_id=6, channel=0,
                                             max_value=5, min_value=3, format="%0.1fV", value_format="%0.2fV")
-        # bat_voltage_plot_view.set_callback(sensor_data_mock_3_4)
         bat_current_plot_view = NexPlotView(conn=dsp, prefix="bat_i", comp_id=6, channel=1,
                                             max_value=1.5, min_value=0, format="%0.1fA", value_format="%0.2fA")
-        # bat_current_plot_view.set_callback(sensor_data_mock_05_1)
         coll_voltage_plot_view = NexPlotView(conn=dsp, prefix="coll_v", comp_id=7, channel=0,
                                              max_value=10, min_value=0, format="%0.1fV", value_format="%0.2fV")
         coll_voltage_plot_view.set_callback(functools.partial(read_sensor_value, panel_source.voltage))
