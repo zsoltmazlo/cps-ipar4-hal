@@ -82,27 +82,26 @@ def process_request(request: hal_pb2.Request):
 
         # read battery voltage data from sensor when all data or that specific data requested
         if (request.data & hal_pb2.Request.BATTERY_VOLTAGE) > 0:
-            state = battery_source.status.GetBatteryVoltage()
-            if state['error'] == 'NO_ERROR':
-                response.batteryDetails.voltage.value = state['data']
+            success, voltage = battery_source.bus_voltage()
+            if success:
+                response.batteryDetails.voltage.value = voltage
                 response.batteryDetails.voltage.unit = hal_pb2.Voltage.MILLIVOLT
             else:
                 response.status |= hal_pb2.Response.BATTERY_ERROR
 
         if (request.data & hal_pb2.Request.BATTERY_CURRENT) > 0:
-            state = battery_source.status.GetBatteryCurrent()
-            if state['error'] == 'NO_ERROR':
-                response.batteryDetails.current.value = state['data']
+            success, current  = battery_source.current()
+            if success:
+                response.batteryDetails.current.value = current
                 response.batteryDetails.current.unit = hal_pb2.Current.MILLIAMPER
             else:
                 response.status |= hal_pb2.Response.BATTERY_ERROR
 
         if (request.data & hal_pb2.Request.BATTERY_STATE) > 0:
-            state = battery_source.status.GetChargeLevel()
-            if state['error'] == 'NO_ERROR':
-                response.batteryDetails.state = str(state['data'])
-            else:
-                response.status |= hal_pb2.Response.BATTERY_ERROR
+            # if True:
+            response.batteryDetails.state = "NOT YET IMPLEMENTED"
+            # else:
+            #     response.status |= hal_pb2.Response.BATTERY_ERROR
 
         # read external power source data from sensor when all data or that specific data requested
         if (request.data & hal_pb2.Request.EXTERNAL_PS_VOLTAGE) > 0:

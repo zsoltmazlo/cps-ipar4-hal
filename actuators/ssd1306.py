@@ -21,6 +21,7 @@ class SSD1306:
         # Create blank image for drawing.
         # Make sure to create image with mode '1' for 1-bit color.
         self.image = Image.new('1', (self.display.width, self.display.height))
+        self.image.rotate(angle=180, center=(64,32))
 
         # Get drawing object to draw on image.
         self.draw = ImageDraw.Draw(self.image)

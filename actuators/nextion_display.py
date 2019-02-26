@@ -15,7 +15,7 @@ from nextion.SpriteBasedAnimationView import SpriteBasedAnimationView
 from nextion.TextView import TextView
 from protogen import hal_pb2
 from config import pwr_selector, collector_positioner, light_sensor, sensor_request_lock, task_manager, env_sensor, \
-    external_source, panel_source
+    external_source, panel_source, battery_source
 
 
 def update_views_task(task_name: string, views:[], dt=100):
@@ -91,8 +91,16 @@ def display_handler_task():
 
         bat_voltage_plot_view = NexPlotView(conn=dsp, prefix="bat_v", comp_id=6, channel=0,
                                             max_value=5, min_value=3, format="%0.1fV", value_format="%0.2fV")
+        bat_voltage_plot_view.set_callback(functools.partial(read_sensor_value, battery_source.voltage))
+        bat_voltage_view = SensorView(conn=dsp, name="bat_v", format="%.0fmV")
+        bat_voltage_view.set_callback(functools.partial(read_sensor_value, battery_source.bus_voltage))
+
         bat_current_plot_view = NexPlotView(conn=dsp, prefix="bat_i", comp_id=6, channel=1,
                                             max_value=1.5, min_value=0, format="%0.1fA", value_format="%0.2fA")
+        bat_current_plot_view.set_callback(functools.partial(read_sensor_value, battery_source.current))
+        bat_current_view = SensorView(conn=dsp, name="bat_i", format="%.0fmA")
+        bat_current_view.set_callback(functools.partial(read_sensor_value, battery_source.current))
+
         coll_voltage_plot_view = NexPlotView(conn=dsp, prefix="coll_v", comp_id=7, channel=0,
                                              max_value=10, min_value=0, format="%0.1fV", value_format="%0.2fV")
         coll_voltage_plot_view.set_callback(functools.partial(read_sensor_value, panel_source.voltage))
@@ -126,6 +134,7 @@ def display_handler_task():
                          args=("quick sensor data update task",
                                [tilt_view, rotation_view,
                                 ext_voltage_view, ext_current_view,
+                                bat_voltage_view, bat_current_view,
                                 coll_voltage_view, coll_current_view], 500))
         task_manager.run_task(task_name="quick sensor data update task", task=t2)
         threads.append("quick sensor data update task")
@@ -200,8 +209,11 @@ def display_handler_task():
 
         print("Closing display")
 
-        for th in threads:
-            task_manager.finish_task(th)
+        try:
+            for th in threads:
+                task_manager.finish_task(th)
+        except:
+            pass
 
         display.send_command('dim=0')
         display.send_command('page 0')
