@@ -162,14 +162,14 @@ In the response, we did received that the voltage of the battery, the temperatur
 
 | Battery voltage
 | BATTERY_VOLTAGE
-| INA219
+| link:resources/docs/ina219.pdf[INA219]
 | batteryDetails.voltage
 | [0, 4200]
 | mV
 
 | Battery current
 | BATTERY_CURRENT
-| INA219
+| link:resources/docs/ina219.pdf[INA219]
 | batteryDetails.current
 | [0, 3200]
 | mA
@@ -183,14 +183,14 @@ In the response, we did received that the voltage of the battery, the temperatur
 
 | External power source voltage
 | EXTERNAL_PS_VOLTAGE
-| INA219
+| link:resources/docs/ina219.pdf[INA219]
 | externalPSDetails.voltage
 | [0, 10000]
 | mV
 
 | External power source current
 | EXTERNAL_PS_CURRENT
-| INA219
+| link:resources/docs/ina219.pdf[INA219]
 | externalPSDetails.current
 | [0, 3200]
 | mA
@@ -204,14 +204,14 @@ In the response, we did received that the voltage of the battery, the temperatur
 
 | Solar panel power source voltage
 | COLLECTOR_PS_VOLTAGE
-| INA219
+| link:resources/docs/ina219.pdf[INA219]
 | collectorPSDetails.voltage
 | [0, 7000]
 | mV
 
 | Solar panel power source current
 | COLLECTOR_PS_CURRENT
-| INA219
+| link:resources/docs/ina219.pdf[INA219]
 | collectorPSDetails.current
 | [0, 3200]
 | mA
