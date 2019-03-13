@@ -2,7 +2,7 @@ from pprint import pprint
 
 from actuators.nextion_display import display_handler_task
 from config import HOST, PORT, display, pwr_selector, collector_positioner, task_manager
-from process_request import process_request
+from utils.process_request import process_request
 from protogen import hal_pb2
 import socket
 import threading

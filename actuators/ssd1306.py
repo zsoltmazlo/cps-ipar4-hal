@@ -25,7 +25,7 @@ class SSD1306:
 
         # Get drawing object to draw on image.
         self.draw = ImageDraw.Draw(self.image)
-        self.draw.font = ImageFont.truetype('/home/pi/cps-gen2/Minecraftia-Regular.ttf', 8)
+        self.draw.font = ImageFont.truetype('/home/pi/cps-gen2/resources/Minecraftia-Regular.ttf', 8)
 
         # Draw a black filled box to clear the image.
         self.draw.rectangle((0, 0, self.display.width, self.display.height), outline=0, fill=0)

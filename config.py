@@ -1,5 +1,5 @@
 import threading
-from task_manager import TaskManager
+from utils.task_manager import TaskManager
 
 from actuators.collectorpositioner import CollectorPositioner
 from actuators.power_source_selector import PowerSourceSelector
