@@ -22,6 +22,8 @@ The demonstrator has the following hardware:
 ** Solar panel tilt and rotation servos: SG90
 ** Power source selection: custom electronics
 
+
+image:resources/figures/hw_top.jpg[]
 Demonstrator hardware
 
 The schematic and the PCB design of the hardware can be found link:resources/docs/hardware.pdf[here].
@@ -43,6 +45,7 @@ A Request message should contain the followings:
 . The _rotation_angle field_, which controls the angle of the solar panel's rotation (optional). This field should be contains a valid value if the SET_COLLECTOR_ROTATION_ANGLE Control flag is set.
 . The _message field_, which can be used to show message on the small OLED display (optional). This field should be contains a valid value if the SHOW_MESSAGE Control flag is set.
 
+=== Example
 
 In the following example, we send a request to fetch
 
@@ -98,7 +101,7 @@ Also, the control flag set to SET_COLLECTOR_ROTATION_ANGLE, which is 4.
 
 In the response, we did received that the voltage of the battery, the temperature in celcius degrees, the relative humidity in percentage and also the rotation of the solar panel.
 
-== Sensor
+== Interval table
 
 |===
 | Data | Data flag in request message | Source sensor | Field in response message | Data interval | Unit
@@ -226,4 +229,13 @@ In the response, we did received that the voltage of the battery, the temperatur
 
 |===
 
+== Photos
 
+image:resources/figures/display1.jpg[]
+A small green house to show current state data
+
+image:resources/figures/display2.jpg[]
+Display in usage
+
+image:resources/figures/hat.jpg[]
+Raspberry Pi Hat
