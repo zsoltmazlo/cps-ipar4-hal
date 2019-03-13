@@ -107,9 +107,9 @@ message Request {
         NO_THANKS = 0;
 
         // all internal data is received from a sensor placed on the PCB
-        // temperature: data received from BMP280 sensor
-        // humidity: data received from BMP280 sensor
-        // pressure: data received from BMP280 sensor
+        // temperature: data received from BME280 sensor
+        // humidity: data received from BME280 sensor
+        // pressure: data received from BME280 sensor
         INTERNAL_TEMPERATURE = 1;
         INTERNAL_HUMIDITY = 2;
         INTERNAL_PRESSURE = 4;

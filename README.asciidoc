@@ -1,0 +1,229 @@
+= Industry 4.0 demonstrator - HAL
+
+This repository contains the Hardware Abstraction Layer for the Industry 4.0 demonstrator of Budapest University of Technology and Economics Fault Tolerant Systems Research Group.
+
+== Concept
+
+The concept behind this demonstrator is a System of systems to enhance agricultural solutions with smart, cooperative systems to reach better power consumption. We simulate how can achieve a better and cheaper maintenance of a green house where we can both collect data from local sensors and use data from cloud services as well.
+
+
+== Hardware
+
+The demonstrator has the following hardware:
+
+* Main processing unit: Raspberry Pi gen 2
+* Sensors
+** Light intensity: BH1750
+** Temperature, humidity and pressure: BME280
+** Temperature: DS18B20
+** Voltage, current: INA219
+* Actuators
+** 128x64 OLED display: SSD1306
+** Solar panel tilt and rotation servos: SG90
+** Power source selection: custom electronics
+
+Demonstrator hardware
+
+The schematic and the PCB design of the hardware can be found link:resources/docs/hardware.pdf[here].
+
+== Software
+
+The HAL designed to be able to used from several development environments and platforms, thus it utilizes link:https://developers.google.com/protocol-buffers/[Protocol Buffers] for communication over a plain old TCP socket on port 9001. Every request issued to the system followed by a response message with information in it about errors and requested data in there was any.
+
+=== Messaging
+
+The messaging based on Protocol Buffers messages which description can be found in the link:resources/hal.proto[hal.proto] file. Within each request, the requester can fetch one or more sensor data and can control one or more actuator at the same time. In the response message, all data fields are filled out with the result of the measurement triggered by the request, but *only the requested data are filled out* and the other fields are held on the default value.
+
+A Request message should contain the followings:
+
+. The *data field*, which contains all the data request flag combined. Data flags are can be found in the Data enumeration inside the Request message.
+. The *control field*, which contains all the control action flag combined. Control flags can be found in the Control enumeration inside the Request message.
+. The _source field_, which instructs the hardware to switch input power source (optional). Available options can be found in the PowerSource enumeration. This field should be contains a valid value if the SET_POWER_SOURCE Control flag is set.
+. The _tilt_angle field_, which controls the angle of the solar panel's tiltness (optional). This field should be contains a valid value if the SET_COLLECTOR_TILT_ANGLE Control flag is set.
+. The _rotation_angle field_, which controls the angle of the solar panel's rotation (optional). This field should be contains a valid value if the SET_COLLECTOR_ROTATION_ANGLE Control flag is set.
+. The _message field_, which can be used to show message on the small OLED display (optional). This field should be contains a valid value if the SHOW_MESSAGE Control flag is set.
+
+
+In the following example, we send a request to fetch
+
+* Temperature data from the BME280 sensor
+* Humidity data from the BME280 sensor
+* and the voltage of the battery from an INA219 sensor
+
+Also, in this example we instruct the demonstrator to rotate the solar panel to 90 degrees.
+
+....
+pi@cpsbox1:~/cps-gen2 $ python3 -i test.py
+>>> single_data_fetch("10.40.2.155", 9001, rotation_angle=90)
+Connected to socket, sending test data
+Request:
+data: 259
+control: 4
+rotation_angle {
+  value: 90
+  unit: DEGREE
+}
+
+Response:
+temperature {
+  value: 31.317577362060547
+  unit: CELSIUS
+}
+humidity {
+  value: 23.635541915893555
+  unit: RELATIVE_HUMIDITY
+}
+collectorRotation {
+  value: 90.0
+  unit: DEGREE
+}
+batteryDetails {
+  voltage {
+    value: 3456.0
+    unit: MILLIVOLT
+  }
+}
+
+Errors:
+>>>
+....
+
+As you can see, the data flag is a combination of the following flags:
+
+* INTERNAL_TEMPERATURE = 1
+* INTERNAL_HUMIDITY = 2
+* BATTERY_VOLTAGE = 256, in summary: 259.
+
+Also, the control flag set to SET_COLLECTOR_ROTATION_ANGLE, which is 4.
+
+In the response, we did received that the voltage of the battery, the temperature in celcius degrees, the relative humidity in percentage and also the rotation of the solar panel.
+
+== Sensor
+
+|===
+| Data | Data flag in request message | Source sensor | Field in response message | Data interval | Unit
+
+| Temperature
+| INTERNAL_TEMPERATURE
+| link:resources/docs/BST-BME280_DS001-10.pdf[BME280]
+| temperature
+| [-40, 85]
+| °C
+
+| Relative humidity
+| INTERNAL_HUMIDITY
+| link:resources/docs/BST-BME280_DS001-10.pdf[BME280]
+| humidity
+| [0, 100]
+| %
+
+| Pressure
+| INTERNAL_PRESSURE
+| link:resources/docs/BST-BME280_DS001-10.pdf[BME280]
+| pressure
+| [300, 1100]
+| hPa
+
+| Illuminance
+| INTERNAL_ILLUMINANCE
+| link:resources/docs/bh1750fvi-e-186247.pdf[BH1750]
+| illuminance
+| [1, 65535]
+| lx
+
+| Temperature
+| EXTERNAL_TEMPERATURE
+| link:resources/docs/DS18B20[DS18B20]
+| externalTemperature
+| [-10, 85]
+| °C
+
+| Solar panel tiltness
+| COLLECTOR_TILT
+| SG90 servo
+| collectorTilt
+| [0,90]
+| °
+
+
+| Solar panel rotation
+| COLLECTOR_ROTATION
+| SG90 servo
+| collectorRotation
+| [0,180]
+| °
+
+| Input power source
+| POWER_SOURCE
+| Custom electronics
+| powerSource
+| (BATTERY, EXTERNAL, COLLECTOR)
+|
+
+| Battery voltage
+| BATTERY_VOLTAGE
+| INA219
+| batteryDetails.voltage
+| [0, 4200]
+| mV
+
+| Battery current
+| BATTERY_CURRENT
+| INA219
+| batteryDetails.current
+| [0, 3200]
+| mA
+
+| Battery state
+| BATTERY_STATE
+| internal logic
+| batteryDetails.current
+| (excellent, good, bad, insufficient)
+| -
+
+| External power source voltage
+| EXTERNAL_PS_VOLTAGE
+| INA219
+| externalPSDetails.voltage
+| [0, 10000]
+| mV
+
+| External power source current
+| EXTERNAL_PS_CURRENT
+| INA219
+| externalPSDetails.current
+| [0, 3200]
+| mA
+
+| External power source state
+| EXTERNAL_PS_STATE
+| internal logic
+| externalPSDetails.state
+| (excellent, good, bad, insufficient)
+| -
+
+| Solar panel power source voltage
+| COLLECTOR_PS_VOLTAGE
+| INA219
+| collectorPSDetails.voltage
+| [0, 7000]
+| mV
+
+| Solar panel power source current
+| COLLECTOR_PS_CURRENT
+| INA219
+| collectorPSDetails.current
+| [0, 3200]
+| mA
+
+| Solar panel power source state
+| COLLECTOR_PS_STATE
+| internal logic
+| collectorPSDetails.state
+| (excellent, good, bad, insufficient)
+| -
+
+
+|===
+
+

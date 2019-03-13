@@ -7,14 +7,14 @@ from nextion.NextionView import NextionView
 from protogen import hal_pb2
 
 
-def socket_test(host, port, tilt_angle=None, rotation_angle=None, message=None, source=None):
+def single_data_fetch(host, port, tilt_angle=None, rotation_angle=None, message=None, source=None):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sck:
         sck.connect((host, port))
         print("Connected to socket, sending test data")
 
         request = hal_pb2.Request()
-        request.data = hal_pb2.Request.COLLECTOR_PS_STATE*2-1
-        # request.data = hal_pb2.Request.INTERNAL_TEMPERATURE | hal_pb2.Request.INTERNAL_HUMIDITY | hal_pb2.Request.BATTERY_VOLTAGE
+        # request.data = hal_pb2.Request.COLLECTOR_PS_STATE*2-1
+        request.data = hal_pb2.Request.INTERNAL_TEMPERATURE | hal_pb2.Request.INTERNAL_HUMIDITY | hal_pb2.Request.BATTERY_VOLTAGE
 
         if tilt_angle is not None:
             request.control |= hal_pb2.Request.SET_COLLECTOR_TILT_ANGLE
