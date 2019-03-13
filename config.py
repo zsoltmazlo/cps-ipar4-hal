@@ -17,7 +17,7 @@ from mocks.PiJuice import PiJuice
 
 HOST = '0.0.0.0' # on all interface
 # HOST = '127.0.0.1' # only for localhost
-PORT = 9007
+PORT = 9001
 
 #      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 # 00:          -- -- -- -- -- -- -- -- -- -- -- -- --
